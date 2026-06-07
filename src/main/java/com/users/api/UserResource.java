@@ -1,8 +1,6 @@
 package com.users.api;
 
 import java.net.URI;
-import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 import com.users.api.dto.CreateUserRequest;
@@ -10,6 +8,7 @@ import com.users.api.dto.UserResponse;
 import com.users.api.mapper.UserDtoMapper;
 import com.users.application.usecase.CreateUserUseCase;
 import com.users.application.usecase.GetUserByIdUseCase;
+import com.users.domain.exception.UserNotFoundException;
 import com.users.domain.model.User;
 
 import jakarta.inject.Inject;
@@ -50,14 +49,10 @@ public class UserResource {
 	@GET
 	@Path("/{id}")
 	public Response getUserById(@PathParam("id") UUID id) {
-		Optional<User> user = getUserByIdUseCase.execute(id);
-		if (user.isEmpty()) {
-			return Response.status(Response.Status.NOT_FOUND)
-					.entity(Map.of("status", 404, "message", "User not found"))
-					.build();
-		}
+		User user = getUserByIdUseCase.execute(id)
+				.orElseThrow(() -> new UserNotFoundException(id));
 
-		UserResponse response = userDtoMapper.toResponse(user.get());
+		UserResponse response = userDtoMapper.toResponse(user);
 		return Response.ok(response).build();
 	}
 }

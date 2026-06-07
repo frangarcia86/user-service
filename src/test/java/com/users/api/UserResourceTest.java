@@ -1,13 +1,13 @@
 package com.users.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.net.URI;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,6 +22,7 @@ import com.users.api.dto.UserResponse;
 import com.users.api.mapper.UserDtoMapper;
 import com.users.application.usecase.CreateUserUseCase;
 import com.users.application.usecase.GetUserByIdUseCase;
+import com.users.domain.exception.UserNotFoundException;
 import com.users.domain.model.User;
 
 import jakarta.ws.rs.core.Response;
@@ -124,19 +125,15 @@ class UserResourceTest {
     }
 
     @Test
-    void getUserById_returns404WhenUserDoesNotExist() {
-        // Arrange: repository returns no user for the requested id
+    void getUserById_throwsUserNotFoundExceptionWhenUserDoesNotExist() {
+        // Arrange: repository returns nothing for the requested id
         UUID id = UUID.randomUUID();
 
         when(getUserByIdUseCase.execute(id)).thenReturn(Optional.empty());
 
-        // Act: execute resource method
-        Response response = userResource.getUserById(id);
-
-        // Assert: validate not found response and interaction
-        assertThat(response.getStatus()).isEqualTo(404);
-        assertThat(response.getEntity())
-                .isEqualTo(Map.of("status", 404, "message", "User not found"));
+        // Act + Assert: resource throws domain exception
+        assertThatThrownBy(() -> userResource.getUserById(id))
+                .isInstanceOf(UserNotFoundException.class);
 
         verify(getUserByIdUseCase).execute(id);
     }
