@@ -12,9 +12,7 @@ public class UserNotFoundExceptionMapper implements ExceptionMapper<UserNotFound
     @Override
     public Response toResponse(UserNotFoundException exception) {
         return Response.status(Response.Status.NOT_FOUND)
-                .entity(new ProblemDetail("User Not Found", 404))
+                .entity(new ErrorResponse("User Not Found", 404))
                 .build();
     }
-
-    public record ProblemDetail(String title, int status) {}
 }
