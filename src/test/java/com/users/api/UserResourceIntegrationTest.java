@@ -12,7 +12,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 
 @QuarkusTest
-class UserResourceValidationTest {
+class UserResourceIntegrationTest {
 
     @Test
     void createUser_returns400_whenNameIsBlank() {
