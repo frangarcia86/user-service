@@ -1,0 +1,100 @@
+{
+  "info": {
+    "name": "User Service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Create User",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/users",
+          "host": ["{{baseUrl}}"],
+          "path": ["users"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Anton\",\n  \"email\": \"anton@mail.com\",\n  \"birthDate\": \"1986-07-20\",\n  \"phone\": \"+34611223344\",\n  \"address\": \"Jaen Street 3\",\n  \"postalCode\": 29010\n}"
+        }
+      }
+    },
+    {
+      "name": "Create User - Missing name (400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/users",
+          "host": ["{{baseUrl}}"],
+          "path": ["users"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"\",\n  \"email\": \"anton@mail.com\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Create User - Invalid email (400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/users",
+          "host": ["{{baseUrl}}"],
+          "path": ["users"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Anton\",\n  \"email\": \"not-an-email\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Get User by ID",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/users/{{userId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["users", "{{userId}}"]
+        }
+      }
+    },
+    {
+      "name": "Get User by ID - Not found (404)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/users/00000000-0000-0000-0000-000000000000",
+          "host": ["{{baseUrl}}"],
+          "path": ["users", "00000000-0000-0000-0000-000000000000"]
+        }
+      }
+    }
+  ]
+}
