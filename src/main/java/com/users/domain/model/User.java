@@ -1,17 +1,31 @@
 package com.users.domain.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.UUID;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Getter
-@EqualsAndHashCode(callSuper = true)
 public class User extends AggregateRoot {
 
-    private final String name;
     private final String email;
+    
+    @Setter
+    private String name;
+
+    @Setter
+    private LocalDate birthDate;
+
+    @Setter
+    private String phone;
+
+    @Setter
+    private String address;
+
+    @Setter
+    private Integer postalCode;
 
     public User(UUID id, String name, String email, Instant createdAt) {
         super(id, createdAt);
