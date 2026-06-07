@@ -53,7 +53,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
                 status: 400
-                message: "Name is required"
+                title: "Name is required"
         '409':
           description: Email already exists
           content:
@@ -62,7 +62,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
                 status: 409
-                message: "Email already exists"
+                title: "Email already exists"
 
   /users/{id}:
     get:
@@ -100,7 +100,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
                 status: 400
-                message: "Invalid UUID format"
+                title: "Invalid UUID format"
         '404':
           description: User not found
           content:
@@ -109,7 +109,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
                 status: 404
-                message: "User not found"
+                title: "User not found"
 
     put:
       summary: Update a user
@@ -150,7 +150,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
                 status: 400
-                message: "Invalid UUID format"
+                title: "Invalid UUID format"
         '404':
           description: User not found
           content:
@@ -159,7 +159,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
                 status: 404
-                message: "User not found"
+                title: "User not found"
         '409':
           description: Email already exists
           content:
@@ -168,7 +168,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
                 status: 409
-                message: "Email already exists"
+                title: "Email already exists"
 
     patch:
       summary: Partially update a user
@@ -205,7 +205,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
                 status: 400
-                message: "Invalid UUID format"
+                title: "Invalid UUID format"
         '404':
           description: User not found
           content:
@@ -214,7 +214,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
                 status: 404
-                message: "User not found"
+                title: "User not found"
         '409':
           description: Email already exists
           content:
@@ -223,7 +223,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
                 status: 409
-                message: "Email already exists"
+                title: "Email already exists"
 
     delete:
       summary: Delete a user
@@ -247,7 +247,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
                 status: 400
-                message: "Invalid UUID format"
+                title: "Invalid UUID format"
         '404':
           description: User not found
           content:
@@ -256,7 +256,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
                 status: 404
-                message: "User not found"
+                title: "User not found"
 
 components:
   schemas:
@@ -391,6 +391,6 @@ components:
         status:
           type: integer
           example: 400
-        message:
+        title:
           type: string
           example: "User not found"
