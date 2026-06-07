@@ -1,11 +1,13 @@
 package com.users.domain.model;
 
-import lombok.Getter;
-
 import java.time.Instant;
 import java.util.UUID;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+
 @Getter
+@EqualsAndHashCode
 public abstract class AggregateRoot {
 
     private final UUID id;
