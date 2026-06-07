@@ -39,7 +39,7 @@ public class UserResource {
 
 	@POST
 	public Response createUser(@Valid CreateUserRequest request) {
-		User createdUser = createUserUseCase.execute(request.getName(), request.getEmail());
+		User createdUser = createUserUseCase.execute(userDtoMapper.toDomain(request));
 		UserResponse response = userDtoMapper.toResponse(createdUser);
 
 		return Response.created(URI.create("/users/" + createdUser.getId()))

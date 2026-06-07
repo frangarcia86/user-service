@@ -14,8 +14,7 @@ public class CreateUserUseCase {
     UserRepository userRepository;
 
     @Transactional
-    public User execute(String name, String email) {
-        User user = User.create(name, email);
+    public User execute(User user) {
         return userRepository.save(user);
     }
 }
