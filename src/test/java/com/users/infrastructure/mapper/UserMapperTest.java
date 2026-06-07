@@ -21,21 +21,21 @@ class UserMapperTest {
         UUID id = UUID.randomUUID();
         Instant createdAt = Instant.now();
 
-        User user = new User(id, "Fran", "fran@example.com", createdAt);
-        user.setBirthDate(LocalDate.of(1990, 6, 15));
-        user.setPhone("+34600000000");
-        user.setAddress("Calle Mayor 1");
-        user.setPostalCode(23740);
+        User user = new User(id, "Anton", "antonio@mail.com", createdAt);
+        user.setBirthDate(LocalDate.of(1986, 7, 20));
+        user.setPhone("+34611223344");
+        user.setAddress("Jaen Street 3");
+        user.setPostalCode(29010);
 
         UserEntity entity = mapper.toEntity(user);
 
         assertThat(entity.getId()).isEqualTo(id);
-        assertThat(entity.getName()).isEqualTo("Fran");
-        assertThat(entity.getEmail()).isEqualTo("fran@example.com");
-        assertThat(entity.getBirthDate()).isEqualTo(LocalDate.of(1990, 6, 15));
-        assertThat(entity.getPhone()).isEqualTo("+34600000000");
-        assertThat(entity.getAddress()).isEqualTo("Calle Mayor 1");
-        assertThat(entity.getPostalCode()).isEqualTo(23740);
+        assertThat(entity.getName()).isEqualTo("Anton");
+        assertThat(entity.getEmail()).isEqualTo("antonio@mail.com");
+        assertThat(entity.getBirthDate()).isEqualTo(LocalDate.of(1986, 7, 20));
+        assertThat(entity.getPhone()).isEqualTo("+34611223344");
+        assertThat(entity.getAddress()).isEqualTo("Jaen Street 3");
+        assertThat(entity.getPostalCode()).isEqualTo(29010);
         assertThat(entity.getCreatedAt()).isEqualTo(createdAt);
     }
 
@@ -46,23 +46,23 @@ class UserMapperTest {
 
         UserEntity entity = new UserEntity();
         entity.setId(id);
-        entity.setName("Fran");
-        entity.setEmail("fran@example.com");
-        entity.setBirthDate(LocalDate.of(1990, 6, 15));
-        entity.setPhone("+34600000000");
-        entity.setAddress("Calle Mayor 1");
-        entity.setPostalCode(23740);
+        entity.setName("Anton");
+        entity.setEmail("antonio@mail.com");
+        entity.setBirthDate(LocalDate.of(1986, 7, 20));
+        entity.setPhone("+34611223344");
+        entity.setAddress("Jaen Street 3");
+        entity.setPostalCode(29010);
         entity.setCreatedAt(createdAt);
 
         User user = mapper.toDomain(entity);
 
         assertThat(user.getId()).isEqualTo(id);
-        assertThat(user.getName()).isEqualTo("Fran");
-        assertThat(user.getEmail()).isEqualTo("fran@example.com");
-        assertThat(user.getBirthDate()).isEqualTo(LocalDate.of(1990, 6, 15));
-        assertThat(user.getPhone()).isEqualTo("+34600000000");
-        assertThat(user.getAddress()).isEqualTo("Calle Mayor 1");
-        assertThat(user.getPostalCode()).isEqualTo(23740);
+        assertThat(user.getName()).isEqualTo("Anton");
+        assertThat(user.getEmail()).isEqualTo("antonio@mail.com");
+        assertThat(user.getBirthDate()).isEqualTo(LocalDate.of(1986, 7, 20));
+        assertThat(user.getPhone()).isEqualTo("+34611223344");
+        assertThat(user.getAddress()).isEqualTo("Jaen Street 3");
+        assertThat(user.getPostalCode()).isEqualTo(29010);
         assertThat(user.getCreatedAt()).isEqualTo(createdAt);
     }
 }
