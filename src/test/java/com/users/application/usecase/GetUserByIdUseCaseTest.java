@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,7 +28,7 @@ class GetUserByIdUseCaseTest {
     @Test
     void execute_returnsUserWhenRepositoryFindsIt() {
         UUID id = UUID.randomUUID();
-        User user = new User(id, "Anton", "antonio@mail.com", Instant.now());
+        User user = new User(id, "Anton", "antonio@mail.com");
 
         when(userRepository.findUserById(id)).thenReturn(Optional.of(user));
 

@@ -18,7 +18,7 @@ class UserDtoMapperTest {
     private final UserDtoMapper mapper = Mappers.getMapper(UserDtoMapper.class);
 
     @Test
-    void toDomain_mapsRequestFields_andGeneratesIdAndCreatedAt() {
+    void toDomain_mapsRequestFields_andGeneratesId() {
         CreateUserRequest request = new CreateUserRequest();
         request.setName("Anton");
         request.setEmail("antonio@mail.com");
@@ -27,12 +27,10 @@ class UserDtoMapperTest {
         request.setAddress("Jaen Street 3");
         request.setPostalCode(29010);
 
-        Instant before = Instant.now();
         User user = mapper.toDomain(request);
-        Instant after = Instant.now();
 
         assertThat(user.getId()).isNotNull();
-        assertThat(user.getCreatedAt()).isAfterOrEqualTo(before).isBeforeOrEqualTo(after);
+        assertThat(user.getCreatedAt()).isNull();
         assertThat(user.getName()).isEqualTo("Anton");
         assertThat(user.getEmail()).isEqualTo("antonio@mail.com");
         assertThat(user.getBirthDate()).isEqualTo(LocalDate.of(1986, 7, 20));
@@ -46,7 +44,8 @@ class UserDtoMapperTest {
         UUID id = UUID.randomUUID();
         Instant createdAt = Instant.now();
 
-        User user = new User(id, "Anton", "antonio@mail.com", createdAt);
+        User user = new User(id, "Anton", "antonio@mail.com");
+        user.setCreatedAt(createdAt);
         user.setBirthDate(LocalDate.of(1986, 7, 20));
         user.setPhone("+34611223344");
         user.setAddress("Jaen Street 3");
@@ -62,5 +61,14 @@ class UserDtoMapperTest {
         assertThat(response.getAddress()).isEqualTo("Jaen Street 3");
         assertThat(response.getPostalCode()).isEqualTo(29010);
         assertThat(response.getCreatedAt()).isEqualTo(createdAt);
+    }
+
+    @Test
+    void toResponse_mapsNullCreatedAt_whenUserIsNew() {
+        User user = new User(UUID.randomUUID(), "Anton", "antonio@mail.com");
+
+        UserResponse response = mapper.toResponse(user);
+
+        assertThat(response.getCreatedAt()).isNull();
     }
 }
