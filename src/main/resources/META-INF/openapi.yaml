@@ -1,0 +1,396 @@
+openapi: 3.0.3
+info:
+  title: User Management API
+  description: REST API for creating and retrieving users
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+  - url: http://{host}
+    description: Production server
+    variables:
+      host:
+        default: localhost:8080
+        description: Target machine hostname or IP
+
+paths:
+  /users:
+    post:
+      summary: Create a new user
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserRequest'
+            example:
+              name: "Fran García"
+              email: "fran@company.com"
+              birthDate: "1990-06-15"
+              phone: "+34 600 000 000"
+              address: "Calle Mayor 1, Madrid"
+              postalCode: 23740
+      responses:
+        '201':
+          description: User created successfully
+          headers:
+            Location:
+              description: URL of the created user
+              schema:
+                type: string
+                example: /users/123e4567-e89b-12d3-a456-426614174000
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: 400
+                title: "Name is required"
+        '409':
+          description: Email already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: 409
+                title: "Email already exists"
+
+  /users/{id}:
+    get:
+      summary: Retrieve a user by ID
+      operationId: getUserById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
+      responses:
+        '200':
+          description: User found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+              example:
+                id: "123e4567-e89b-12d3-a456-426614174000"
+                name: "Fran García"
+                email: "fran@company.com"
+                birthDate: "1990-06-15"
+                phone: "+34 600 000 000"
+                address: "Calle Mayor 1, Madrid"
+                postalCode: 23740
+                createdAt: "2025-06-06T10:30:00Z"
+        '400':
+          description: Invalid UUID format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: 400
+                title: "Invalid UUID format"
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: 404
+                title: "User not found"
+
+    put:
+      summary: Update a user
+      operationId: updateUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserRequest'
+            example:
+              name: "Fran García"
+              email: "fran@company.com"
+              birthDate: "1990-06-15"
+              phone: "+34 600 000 000"
+              address: "Calle Mayor 1, Madrid"
+              postalCode: 23740
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Invalid request body or UUID format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: 400
+                title: "Invalid UUID format"
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: 404
+                title: "User not found"
+        '409':
+          description: Email already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: 409
+                title: "Email already exists"
+
+    patch:
+      summary: Partially update a user
+      operationId: patchUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchUserRequest'
+            example:
+              phone: "+34 600 111 111"
+              address: "Calle Nueva 5, Madrid"
+      responses:
+        '200':
+          description: User partially updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Invalid request body or UUID format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: 400
+                title: "Invalid UUID format"
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: 404
+                title: "User not found"
+        '409':
+          description: Email already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: 409
+                title: "Email already exists"
+
+    delete:
+      summary: Delete a user
+      operationId: deleteUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
+      responses:
+        '204':
+          description: User deleted successfully
+        '400':
+          description: Invalid UUID format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: 400
+                title: "Invalid UUID format"
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: 404
+                title: "User not found"
+
+components:
+  schemas:
+    CreateUserRequest:
+      type: object
+      required:
+        - name
+        - email
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          example: "Fran García"
+        email:
+          type: string
+          format: email
+          example: "fran@company.com"
+        birthDate:
+          type: string
+          format: date
+          example: "1990-06-15"
+        phone:
+          type: string
+          maxLength: 20
+          example: "+34 600 000 000"
+        address:
+          type: string
+          maxLength: 200
+          example: "Calle Mayor 1, Madrid"
+        postalCode:
+          type: integer
+          maximum: 99999999
+          example: 23740
+
+    UpdateUserRequest:
+      type: object
+      required:
+        - name
+        - email
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          example: "Fran García"
+        email:
+          type: string
+          format: email
+          example: "fran@company.com"
+        birthDate:
+          type: string
+          format: date
+          example: "1990-06-15"
+        phone:
+          type: string
+          maxLength: 20
+          example: "+34 600 000 000"
+        address:
+          type: string
+          maxLength: 200
+          example: "Calle Mayor 1, Madrid"
+        postalCode:
+          type: integer
+          maximum: 99999999
+          example: 23740
+
+    PatchUserRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          example: "Fran García"
+        email:
+          type: string
+          format: email
+          example: "fran@company.com"
+        birthDate:
+          type: string
+          format: date
+          example: "1990-06-15"
+        phone:
+          type: string
+          maxLength: 20
+          example: "+34 600 000 000"
+        address:
+          type: string
+          maxLength: 200
+          example: "Calle Mayor 1, Madrid"
+        postalCode:
+          type: integer
+          maximum: 99999999
+          example: 23740
+
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        name:
+          type: string
+          example: "Fran García"
+        email:
+          type: string
+          format: email
+          example: "fran@company.com"
+        birthDate:
+          type: string
+          format: date
+          example: "1990-06-15"
+        phone:
+          type: string
+          example: "+34 600 000 000"
+        address:
+          type: string
+          example: "Calle Mayor 1, Madrid"
+        postalCode:
+          type: integer
+          example: 23740
+        createdAt:
+          type: string
+          format: date-time
+          example: "2025-06-06T10:30:00Z"
+
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 400
+        title:
+          type: string
+          example: "User not found"

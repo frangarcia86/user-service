@@ -1,0 +1,22 @@
+package com.users.api.dto;
+
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.UUID;
+
+import lombok.Builder;
+import lombok.Getter;
+
+@Getter
+@Builder
+public class UserResponse {
+
+    private UUID id;
+    private String name;
+    private String email;
+    private LocalDate birthDate;
+    private String phone;
+    private String address;
+    private Integer postalCode;
+    private Instant createdAt;
+}
