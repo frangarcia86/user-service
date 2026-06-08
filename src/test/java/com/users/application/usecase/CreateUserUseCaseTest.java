@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.time.Instant;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -28,10 +27,9 @@ class CreateUserUseCaseTest {
     @Test
     void execute_savesUserAndReturnsSavedUser() {
         UUID id = UUID.randomUUID();
-        Instant createdAt = Instant.now();
 
-        User input = new User(id, "Anton", "antonio@mail.com", createdAt);
-        User saved = new User(id, "Anton", "antonio@mail.com", createdAt);
+        User input = new User(id, "Anton", "antonio@mail.com");
+        User saved = new User(id, "Anton", "antonio@mail.com");
 
         when(userRepository.save(input)).thenReturn(saved);
 

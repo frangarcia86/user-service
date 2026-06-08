@@ -56,8 +56,8 @@ class UserResourceTest {
         request.setAddress("Jaen Street 3");
         request.setPostalCode(29010);
 
-        User domainRequest = new User(id, "Anton", "antonio@mail.com", createdAt);
-        User createdUser = new User(id, "Anton", "antonio@mail.com", createdAt);
+        User domainRequest = new User(id, "Anton", "antonio@mail.com");
+        User createdUser = new User(id, "Anton", "antonio@mail.com");
         createdUser.setBirthDate(LocalDate.of(1986, 7, 20));
         createdUser.setPhone("+34611223344");
         createdUser.setAddress("Jaen Street 3");
@@ -99,7 +99,7 @@ class UserResourceTest {
         UUID id = UUID.randomUUID();
         Instant createdAt = Instant.now();
 
-        User user = new User(id, "Anton", "antonio@mail.com", createdAt);
+        User user = new User(id, "Anton", "antonio@mail.com");
 
         // Arrange: expected response payload
         UserResponse responseBody = UserResponse.builder()

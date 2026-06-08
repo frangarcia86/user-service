@@ -1,15 +1,16 @@
 package com.users.infrastructure.repository;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import com.users.domain.model.User;
 import com.users.domain.repository.UserRepository;
 import com.users.infrastructure.mapper.UserMapper;
 import com.users.infrastructure.persistence.UserEntity;
+
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-
-import java.util.Optional;
-import java.util.UUID;
 
 @ApplicationScoped
 public class UserRepositoryImpl
@@ -21,7 +22,7 @@ public class UserRepositoryImpl
     @Override
     public User save(User user) {
         UserEntity entity = mapper.toEntity(user);
-        persist(entity);
+        persistAndFlush(entity);
         return mapper.toDomain(entity);
     }
 

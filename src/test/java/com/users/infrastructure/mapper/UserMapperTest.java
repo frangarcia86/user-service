@@ -19,9 +19,8 @@ class UserMapperTest {
     @Test
     void toEntity_mapsAllUserFields() {
         UUID id = UUID.randomUUID();
-        Instant createdAt = Instant.now();
 
-        User user = new User(id, "Anton", "antonio@mail.com", createdAt);
+        User user = new User(id, "Anton", "antonio@mail.com");
         user.setBirthDate(LocalDate.of(1986, 7, 20));
         user.setPhone("+34611223344");
         user.setAddress("Jaen Street 3");
@@ -36,7 +35,7 @@ class UserMapperTest {
         assertThat(entity.getPhone()).isEqualTo("+34611223344");
         assertThat(entity.getAddress()).isEqualTo("Jaen Street 3");
         assertThat(entity.getPostalCode()).isEqualTo(29010);
-        assertThat(entity.getCreatedAt()).isEqualTo(createdAt);
+        assertThat(entity.getCreatedAt()).isNull();
     }
 
     @Test

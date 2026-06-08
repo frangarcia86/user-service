@@ -5,16 +5,18 @@ import java.util.UUID;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @EqualsAndHashCode
 public abstract class AggregateRoot {
 
     private final UUID id;
-    private final Instant createdAt;
 
-    protected AggregateRoot(UUID id, Instant createdAt) {
+    @Setter
+    private Instant createdAt;
+
+    protected AggregateRoot(UUID id) {
         this.id = id;
-        this.createdAt = createdAt;
     }
 }
