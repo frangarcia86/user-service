@@ -17,6 +17,7 @@ import com.users.domain.model.User;
 public interface UserDtoMapper {
 
 	@Mapping(target = "id", expression = "java(UUID.randomUUID())")
+	@Mapping(target = "createdAt", ignore = true)
 	User toDomain(CreateUserRequest request);
 
 	UserResponse toResponse(User user);
