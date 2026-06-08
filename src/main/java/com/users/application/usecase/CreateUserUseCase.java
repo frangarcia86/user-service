@@ -1,5 +1,6 @@
 package com.users.application.usecase;
 
+import com.users.domain.exception.EmailAlreadyExistsException;
 import com.users.domain.model.User;
 import com.users.domain.repository.UserRepository;
 
@@ -15,6 +16,9 @@ public class CreateUserUseCase {
 
     @Transactional
     public User execute(User user) {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new EmailAlreadyExistsException(user.getEmail());
+        }
         return userRepository.save(user);
     }
 }

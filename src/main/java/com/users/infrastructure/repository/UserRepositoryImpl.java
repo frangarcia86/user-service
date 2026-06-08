@@ -30,4 +30,9 @@ public class UserRepositoryImpl
     public Optional<User> findUserById(UUID id) {
         return findByIdOptional(id).map(mapper::toDomain);
     }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return count("email", email) > 0;
+    }
 }
