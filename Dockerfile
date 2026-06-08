@@ -1,11 +1,11 @@
 # Stage 1: Build
-FROM eclipse-temurin:25-jdk-alpine AS build
+FROM eclipse-temurin:25-jdk AS build
 WORKDIR /app
 COPY . .
-RUN ./mvnw package -DskipTests
+RUN chmod +x ./mvnw && ./mvnw package -DskipTests
 
 # Stage 2: Runtime
-FROM eclipse-temurin:25-jre-alpine
+FROM eclipse-temurin:25-jdk
 WORKDIR /deployments
 COPY --from=build /app/target/quarkus-app/lib/ lib/
 COPY --from=build /app/target/quarkus-app/*.jar ./
