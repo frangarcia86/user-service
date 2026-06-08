@@ -1,5 +1,6 @@
 package com.users.infrastructure.repository;
 
+import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,7 +23,8 @@ public class UserRepositoryImpl
     @Override
     public User save(User user) {
         UserEntity entity = mapper.toEntity(user);
-        persistAndFlush(entity);
+        entity.setCreatedAt(Instant.now());
+        persist(entity);
         return mapper.toDomain(entity);
     }
 
