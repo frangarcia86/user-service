@@ -6,7 +6,7 @@
   "variable": [
     {
       "key": "baseUrl",
-      "value": "http://localhost:8080",
+      "value": "{{baseUrl}}",
       "type": "string"
     }
   ],
@@ -33,48 +33,6 @@
       }
     },
     {
-      "name": "Create User - Missing name (400)",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "url": {
-          "raw": "{{baseUrl}}/users",
-          "host": ["{{baseUrl}}"],
-          "path": ["users"]
-        },
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"name\": \"\",\n  \"email\": \"anton@mail.com\"\n}"
-        }
-      }
-    },
-    {
-      "name": "Create User - Invalid email (400)",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "url": {
-          "raw": "{{baseUrl}}/users",
-          "host": ["{{baseUrl}}"],
-          "path": ["users"]
-        },
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"name\": \"Anton\",\n  \"email\": \"not-an-email\"\n}"
-        }
-      }
-    },
-    {
       "name": "Get User by ID",
       "request": {
         "method": "GET",
@@ -82,17 +40,6 @@
           "raw": "{{baseUrl}}/users/{{userId}}",
           "host": ["{{baseUrl}}"],
           "path": ["users", "{{userId}}"]
-        }
-      }
-    },
-    {
-      "name": "Get User by ID - Not found (404)",
-      "request": {
-        "method": "GET",
-        "url": {
-          "raw": "{{baseUrl}}/users/00000000-0000-0000-0000-000000000000",
-          "host": ["{{baseUrl}}"],
-          "path": ["users", "00000000-0000-0000-0000-000000000000"]
         }
       }
     }
