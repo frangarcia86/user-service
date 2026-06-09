@@ -66,29 +66,29 @@ class UserResourceTest {
         Instant createdAt = Instant.now();
 
         CreateUserRequest request = new CreateUserRequest();
-        request.setName("Anton");
-        request.setEmail("antonio@mail.com");
-        request.setBirthDate(LocalDate.of(1986, 7, 20));
-        request.setPhone("+34611223344");
-        request.setAddress("Jaen Street 3");
-        request.setPostalCode(29010);
+        request.setName("Marta Sánchez");
+        request.setEmail("marta.sanchez@mail.com");
+        request.setBirthDate(LocalDate.of(1988, 9, 12));
+        request.setPhone("+34644332211");
+        request.setAddress("Zaragoza Road 8");
+        request.setPostalCode(50001);
 
-        User domainRequest = new User(id, "Anton", "antonio@mail.com");
-        User createdUser = new User(id, "Anton", "antonio@mail.com");
-        createdUser.setBirthDate(LocalDate.of(1986, 7, 20));
-        createdUser.setPhone("+34611223344");
-        createdUser.setAddress("Jaen Street 3");
-        createdUser.setPostalCode(29010);
+        User domainRequest = new User(id, "Marta Sánchez", "marta.sanchez@mail.com");
+        User createdUser = new User(id, "Marta Sánchez", "marta.sanchez@mail.com");
+        createdUser.setBirthDate(LocalDate.of(1988, 9, 12));
+        createdUser.setPhone("+34644332211");
+        createdUser.setAddress("Zaragoza Road 8");
+        createdUser.setPostalCode(50001);
 
         // Arrange: expected response payload
         UserResponse responseBody = UserResponse.builder()
                 .id(id)
-            .name("Anton")
-            .email("antonio@mail.com")
-            .birthDate(LocalDate.of(1986, 7, 20))
-            .phone("+34611223344")
-                .address("Jaen Street 3")
-            .postalCode(29010)
+            .name("Marta Sánchez")
+            .email("marta.sanchez@mail.com")
+            .birthDate(LocalDate.of(1988, 9, 12))
+            .phone("+34644332211")
+                .address("Zaragoza Road 8")
+            .postalCode(50001)
                 .createdAt(createdAt)
                 .build();
 
@@ -116,13 +116,13 @@ class UserResourceTest {
         UUID id = UUID.randomUUID();
         Instant createdAt = Instant.now();
 
-        User user = new User(id, "Anton", "antonio@mail.com");
+        User user = new User(id, "Pablo Navarro", "pablo.navarro@mail.com");
 
         // Arrange: expected response payload
         UserResponse responseBody = UserResponse.builder()
                 .id(id)
-            .name("Anton")
-            .email("antonio@mail.com")
+            .name("Pablo Navarro")
+            .email("pablo.navarro@mail.com")
                 .createdAt(createdAt)
                 .build();
 
@@ -162,25 +162,25 @@ class UserResourceTest {
         Instant createdAt = Instant.now();
 
         UpdateUserRequest request = new UpdateUserRequest();
-        request.setName("Anton Updated");
-        request.setBirthDate(LocalDate.of(1990, 5, 10));
-        request.setPhone("+34611000001");
-        request.setAddress("Updated Street 5");
-        request.setPostalCode(28080);
+        request.setName("Pablo Navarro Updated");
+        request.setBirthDate(LocalDate.of(1985, 3, 21));
+        request.setPhone("+34622334455");
+        request.setAddress("Madrid Street 15");
+        request.setPostalCode(28001);
 
         UserUpdateData updateData = new UserUpdateData(
-                "Anton Updated", LocalDate.of(1990, 5, 10), "+34611000001", "Updated Street 5", 28080);
-        User updatedUser = new User(id, "Anton Updated", "antonio@mail.com");
-        updatedUser.setBirthDate(LocalDate.of(1990, 5, 10));
+                "Pablo Navarro Updated", LocalDate.of(1985, 3, 21), "+34622334455", "Madrid Street 15", 28001);
+        User updatedUser = new User(id, "Pablo Navarro Updated", "pablo.navarro@mail.com");
+        updatedUser.setBirthDate(LocalDate.of(1985, 3, 21));
 
         UserResponse responseBody = UserResponse.builder()
                 .id(id)
-                .name("Anton Updated")
-                .email("antonio@mail.com")
-                .birthDate(LocalDate.of(1990, 5, 10))
-                .phone("+34611000001")
-                .address("Updated Street 5")
-                .postalCode(28080)
+                .name("Pablo Navarro Updated")
+                .email("pablo.navarro@mail.com")
+                .birthDate(LocalDate.of(1985, 3, 21))
+                .phone("+34622334455")
+                .address("Madrid Street 15")
+                .postalCode(28001)
                 .createdAt(createdAt)
                 .build();
 
@@ -205,9 +205,9 @@ class UserResourceTest {
         // Arrange
         UUID id = UUID.randomUUID();
         UpdateUserRequest request = new UpdateUserRequest();
-        request.setName("Anton Updated");
+        request.setName("Pablo Navarro Updated");
 
-        UserUpdateData updateData = new UserUpdateData("Anton Updated", null, null, null, null);
+        UserUpdateData updateData = new UserUpdateData("Pablo Navarro Updated", null, null, null, null);
         when(userDtoMapper.toUpdateData(request)).thenReturn(updateData);
         when(updateUserUseCase.execute(id, updateData)).thenThrow(new UserNotFoundException(id));
 
@@ -223,17 +223,17 @@ class UserResourceTest {
         Instant createdAt = Instant.now();
 
         PatchUserRequest request = new PatchUserRequest();
-        request.setPhone("+34699000000");
+        request.setPhone("+34622334455");
 
-        UserUpdateData patchData = new UserUpdateData(null, null, "+34699000000", null, null);
-        User patchedUser = new User(id, "Anton", "antonio@mail.com");
-        patchedUser.setPhone("+34699000000");
+        UserUpdateData patchData = new UserUpdateData(null, null, "+34622334455", null, null);
+        User patchedUser = new User(id, "Pablo Navarro", "pablo.navarro@mail.com");
+        patchedUser.setPhone("+34622334455");
 
         UserResponse responseBody = UserResponse.builder()
                 .id(id)
-                .name("Anton")
-                .email("antonio@mail.com")
-                .phone("+34699000000")
+                .name("Pablo Navarro")
+                .email("pablo.navarro@mail.com")
+                .phone("+34622334455")
                 .createdAt(createdAt)
                 .build();
 
@@ -258,9 +258,9 @@ class UserResourceTest {
         // Arrange
         UUID id = UUID.randomUUID();
         PatchUserRequest request = new PatchUserRequest();
-        request.setName("New Name");
+        request.setName("Pablo Navarro Updated");
 
-        UserUpdateData patchData = new UserUpdateData("New Name", null, null, null, null);
+        UserUpdateData patchData = new UserUpdateData("Pablo Navarro Updated", null, null, null, null);
         when(userDtoMapper.toUpdateData(request)).thenReturn(patchData);
         when(patchUserUseCase.execute(id, patchData)).thenThrow(new UserNotFoundException(id));
 

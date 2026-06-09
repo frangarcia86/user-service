@@ -32,24 +32,24 @@ class PatchUserUseCaseTest {
     void execute_appliesOnlyProvidedFields() {
         // Arrange: existing user with original data
         UUID id = UUID.randomUUID();
-        User existing = new User(id, "Anton", "antonio@mail.com");
-        existing.setPhone("+34611000000");
-        existing.setAddress("Old Street 1");
+        User existing = new User(id, "Nuria Vidal", "nuria.vidal@web.es");
+        existing.setPhone("+34633221100");
+        existing.setAddress("Bilbao Lane 12");
 
-        User saved = new User(id, "Anton Updated", "antonio@mail.com");
-        saved.setPhone("+34611000000");
-        saved.setAddress("Old Street 1");
+        User saved = new User(id, "Nuria Vidal Updated", "nuria.vidal@web.es");
+        saved.setPhone("+34633221100");
+        saved.setAddress("Bilbao Lane 12");
 
         when(userRepository.findUserById(id)).thenReturn(Optional.of(existing));
         when(userRepository.update(existing)).thenReturn(saved);
 
         // Act: only name is patched
-        UserUpdateData data = new UserUpdateData("Anton Updated", null, null, null, null);
+        UserUpdateData data = new UserUpdateData("Nuria Vidal Updated", null, null, null, null);
         User result = patchUserUseCase.execute(id, data);
 
         // Assert: only name changed on existing entity
-        assertThat(existing.getName()).isEqualTo("Anton Updated");
-        assertThat(existing.getPhone()).isEqualTo("+34611000000");
+        assertThat(existing.getName()).isEqualTo("Nuria Vidal Updated");
+        assertThat(existing.getPhone()).isEqualTo("+34633221100");
         assertThat(result).isEqualTo(saved);
         verify(userRepository).findUserById(id);
         verify(userRepository).update(existing);
@@ -59,24 +59,24 @@ class PatchUserUseCaseTest {
     void execute_appliesAllFieldsWhenAllProvided() {
         // Arrange
         UUID id = UUID.randomUUID();
-        User existing = new User(id, "Anton", "antonio@mail.com");
+        User existing = new User(id, "Nuria Vidal", "nuria.vidal@web.es");
 
-        User saved = new User(id, "New Name", "antonio@mail.com");
-        saved.setBirthDate(LocalDate.of(1995, 1, 1));
-        saved.setPhone("+34699999999");
-        saved.setAddress("New Address");
-        saved.setPostalCode(10000);
+        User saved = new User(id, "Nuria Vidal Complete", "nuria.vidal@web.es");
+        saved.setBirthDate(LocalDate.of(1987, 6, 14));
+        saved.setPhone("+34633221100");
+        saved.setAddress("Bilbao Lane 12");
+        saved.setPostalCode(48001);
 
         when(userRepository.findUserById(id)).thenReturn(Optional.of(existing));
         when(userRepository.update(existing)).thenReturn(saved);
 
         // Act
         UserUpdateData data = new UserUpdateData(
-                "New Name",
-                LocalDate.of(1995, 1, 1),
-                "+34699999999",
-                "New Address",
-                10000
+                "Nuria Vidal Complete",
+                LocalDate.of(1987, 6, 14),
+                "+34633221100",
+                "Bilbao Lane 12",
+                48001
         );
         User result = patchUserUseCase.execute(id, data);
 

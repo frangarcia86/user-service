@@ -30,10 +30,10 @@ class CreateUserUseCaseTest {
     void execute_savesUserAndReturnsSavedUser() {
         UUID id = UUID.randomUUID();
 
-        User input = new User(id, "Anton", "antonio@mail.com");
-        User saved = new User(id, "Anton", "antonio@mail.com");
+        User input = new User(id, "Raul Jimenez", "raul.jimenez@correo.es");
+        User saved = new User(id, "Raul Jimenez", "raul.jimenez@correo.es");
 
-        when(userRepository.existsByEmail("antonio@mail.com")).thenReturn(false);
+        when(userRepository.existsByEmail("raul.jimenez@correo.es")).thenReturn(false);
         when(userRepository.save(input)).thenReturn(saved);
 
         User result = createUserUseCase.execute(input);
@@ -45,9 +45,9 @@ class CreateUserUseCaseTest {
     @Test
     void execute_throwsEmailAlreadyExistsException_whenEmailIsDuplicated() {
         UUID id = UUID.randomUUID();
-        User input = new User(id, "Anton", "antonio@mail.com");
+        User input = new User(id, "Raul Jimenez", "raul.jimenez@correo.es");
 
-        when(userRepository.existsByEmail("antonio@mail.com")).thenReturn(true);
+        when(userRepository.existsByEmail("raul.jimenez@correo.es")).thenReturn(true);
 
         assertThatThrownBy(() -> createUserUseCase.execute(input))
                 .isInstanceOf(EmailAlreadyExistsException.class);

@@ -32,21 +32,21 @@ class UpdateUserUseCaseTest {
     void execute_updatesAllFieldsAndReturnsUpdatedUser() {
         // Arrange: existing user in repository
         UUID id = UUID.randomUUID();
-        User existing = new User(id, "Anton", "antonio@mail.com");
+        User existing = new User(id, "Sofia Martin", "sofia.martin@empresa.com");
 
         UserUpdateData data = new UserUpdateData(
-                "Antonio Updated",
-                LocalDate.of(1990, 5, 10),
-                "+34611000000",
-                "New Street 1",
-                28080
+                "Sofia Martin Diaz",
+                LocalDate.of(1993, 11, 3),
+                "+34655443322",
+                "Cordoba Plaza 5",
+                14001
         );
 
-        User saved = new User(id, "Antonio Updated", "antonio@mail.com");
-        saved.setBirthDate(LocalDate.of(1990, 5, 10));
-        saved.setPhone("+34611000000");
-        saved.setAddress("New Street 1");
-        saved.setPostalCode(28080);
+        User saved = new User(id, "Sofia Martin Diaz", "sofia.martin@empresa.com");
+        saved.setBirthDate(LocalDate.of(1993, 11, 3));
+        saved.setPhone("+34655443322");
+        saved.setAddress("Cordoba Plaza 5");
+        saved.setPostalCode(14001);
 
         when(userRepository.findUserById(id)).thenReturn(Optional.of(existing));
         when(userRepository.update(existing)).thenReturn(saved);
@@ -64,7 +64,7 @@ class UpdateUserUseCaseTest {
     void execute_throwsUserNotFoundException_whenUserDoesNotExist() {
         // Arrange: repository returns empty
         UUID id = UUID.randomUUID();
-        UserUpdateData data = new UserUpdateData("Antonio Updated", null, null, null, null);
+        UserUpdateData data = new UserUpdateData("Sofia Martin Diaz", null, null, null, null);
 
         when(userRepository.findUserById(id)).thenReturn(Optional.empty());
 

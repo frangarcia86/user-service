@@ -20,23 +20,23 @@ class UserDtoMapperTest {
     @Test
     void toDomain_mapsRequestFields_andGeneratesId() {
         CreateUserRequest request = new CreateUserRequest();
-        request.setName("Anton");
-        request.setEmail("antonio@mail.com");
-        request.setBirthDate(LocalDate.of(1986, 7, 20));
-        request.setPhone("+34611223344");
-        request.setAddress("Jaen Street 3");
-        request.setPostalCode(29010);
+        request.setName("Alejandro Torres");
+        request.setEmail("alejandro.torres@test.com");
+        request.setBirthDate(LocalDate.of(1979, 11, 8));
+        request.setPhone("+34677112233");
+        request.setAddress("Valencia Street 9");
+        request.setPostalCode(46001);
 
         User user = mapper.toDomain(request);
 
         assertThat(user.getId()).isNotNull();
         assertThat(user.getCreatedAt()).isNull();
-        assertThat(user.getName()).isEqualTo("Anton");
-        assertThat(user.getEmail()).isEqualTo("antonio@mail.com");
-        assertThat(user.getBirthDate()).isEqualTo(LocalDate.of(1986, 7, 20));
-        assertThat(user.getPhone()).isEqualTo("+34611223344");
-        assertThat(user.getAddress()).isEqualTo("Jaen Street 3");
-        assertThat(user.getPostalCode()).isEqualTo(29010);
+        assertThat(user.getName()).isEqualTo("Alejandro Torres");
+        assertThat(user.getEmail()).isEqualTo("alejandro.torres@test.com");
+        assertThat(user.getBirthDate()).isEqualTo(LocalDate.of(1979, 11, 8));
+        assertThat(user.getPhone()).isEqualTo("+34677112233");
+        assertThat(user.getAddress()).isEqualTo("Valencia Street 9");
+        assertThat(user.getPostalCode()).isEqualTo(46001);
     }
 
     @Test
@@ -44,28 +44,28 @@ class UserDtoMapperTest {
         UUID id = UUID.randomUUID();
         Instant createdAt = Instant.now();
 
-        User user = new User(id, "Anton", "antonio@mail.com");
+        User user = new User(id, "Alejandro Torres", "alejandro.torres@test.com");
         user.setCreatedAt(createdAt);
-        user.setBirthDate(LocalDate.of(1986, 7, 20));
-        user.setPhone("+34611223344");
-        user.setAddress("Jaen Street 3");
-        user.setPostalCode(29010);
+        user.setBirthDate(LocalDate.of(1979, 11, 8));
+        user.setPhone("+34677112233");
+        user.setAddress("Valencia Street 9");
+        user.setPostalCode(46001);
 
         UserResponse response = mapper.toResponse(user);
 
         assertThat(response.getId()).isEqualTo(id);
-        assertThat(response.getName()).isEqualTo("Anton");
-        assertThat(response.getEmail()).isEqualTo("antonio@mail.com");
-        assertThat(response.getBirthDate()).isEqualTo(LocalDate.of(1986, 7, 20));
-        assertThat(response.getPhone()).isEqualTo("+34611223344");
-        assertThat(response.getAddress()).isEqualTo("Jaen Street 3");
-        assertThat(response.getPostalCode()).isEqualTo(29010);
+        assertThat(response.getName()).isEqualTo("Alejandro Torres");
+        assertThat(response.getEmail()).isEqualTo("alejandro.torres@test.com");
+        assertThat(response.getBirthDate()).isEqualTo(LocalDate.of(1979, 11, 8));
+        assertThat(response.getPhone()).isEqualTo("+34677112233");
+        assertThat(response.getAddress()).isEqualTo("Valencia Street 9");
+        assertThat(response.getPostalCode()).isEqualTo(46001);
         assertThat(response.getCreatedAt()).isEqualTo(createdAt);
     }
 
     @Test
     void toResponse_mapsNullCreatedAt_whenUserIsNew() {
-        User user = new User(UUID.randomUUID(), "Anton", "antonio@mail.com");
+        User user = new User(UUID.randomUUID(), "Alejandro Torres", "alejandro.torres@test.com");
 
         UserResponse response = mapper.toResponse(user);
 
