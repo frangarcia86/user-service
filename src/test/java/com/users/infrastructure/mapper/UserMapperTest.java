@@ -64,4 +64,29 @@ class UserMapperTest {
         assertThat(user.getPostalCode()).isEqualTo(29010);
         assertThat(user.getCreatedAt()).isEqualTo(createdAt);
     }
+
+    @Test
+    void updateEntity_updatesOnlyMappedFields() {
+        UUID id = UUID.randomUUID();
+        Instant createdAt = Instant.now();
+
+        UserEntity entity = new UserEntity();
+        entity.setId(id);
+        entity.setEmail("antonio@mail.com");
+        entity.setCreatedAt(createdAt);
+        entity.setName("Old Name");
+
+        User user = new User(id, "New Name", "antonio@mail.com");
+        user.setBirthDate(LocalDate.of(1990, 1, 1));
+        user.setPhone("+34600000000");
+
+        mapper.updateEntity(user, entity);
+
+        assertThat(entity.getId()).isEqualTo(id);
+        assertThat(entity.getEmail()).isEqualTo("antonio@mail.com");
+        assertThat(entity.getCreatedAt()).isEqualTo(createdAt);
+        assertThat(entity.getName()).isEqualTo("New Name");
+        assertThat(entity.getBirthDate()).isEqualTo(LocalDate.of(1990, 1, 1));
+        assertThat(entity.getPhone()).isEqualTo("+34600000000");
+    }
 }

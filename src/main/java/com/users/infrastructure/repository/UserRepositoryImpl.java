@@ -41,11 +41,7 @@ public class UserRepositoryImpl
     @Override
     public User update(User user) {
         UserEntity entity = findById(user.getId());
-        entity.setName(user.getName());
-        entity.setBirthDate(user.getBirthDate());
-        entity.setPhone(user.getPhone());
-        entity.setAddress(user.getAddress());
-        entity.setPostalCode(user.getPostalCode());
+        mapper.updateEntity(user, entity);
         return mapper.toDomain(entity);
     }
 
