@@ -5,14 +5,10 @@ info:
   version: 1.0.0
 
 servers:
+  - url: https://user-service-1vnl.onrender.com
+    description: Production server (Render)
   - url: http://localhost:8080
     description: Local development server
-  - url: http://{host}
-    description: Production server
-    variables:
-      host:
-        default: localhost:8080
-        description: Target machine hostname or IP
 
 paths:
   /users:
