@@ -5,6 +5,26 @@ This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
 If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
 
+## API
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/users` | Create user |
+| `GET` | `/users/{id}` | Get user by ID |
+
+**Swagger UI:**
+- Local: http://localhost:8080/q/swagger-ui
+- Production: https://user-service-1vnl.onrender.com/q/swagger-ui
+
+## Health
+
+| Environment | URL |
+|-------------|-----|
+| Local | http://localhost:8080/q/health |
+| Production | https://user-service-1vnl.onrender.com/q/health |
+
+Returns `UP` if the service and database are operational, `DOWN` otherwise.
+
 ## Running the application in dev mode
 
 You can run your application in dev mode that enables live coding using:
