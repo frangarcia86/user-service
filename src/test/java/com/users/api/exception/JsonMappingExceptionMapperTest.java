@@ -29,8 +29,7 @@ class JsonMappingExceptionMapperTest {
 
         Response response = mapper.toResponse(exception);
 
-        assertThat(response.getEntity()).isInstanceOf(ErrorResponse.class);
-        ErrorResponse body = (ErrorResponse) response.getEntity();
+        var body = (BaseExceptionMapper.ErrorResponse) response.getEntity();
         assertThat(body.title()).contains("postalCode");
         assertThat(body.status()).isEqualTo(400);
     }
@@ -41,7 +40,7 @@ class JsonMappingExceptionMapperTest {
 
         Response response = mapper.toResponse(exception);
 
-        ErrorResponse body = (ErrorResponse) response.getEntity();
+        var body = (BaseExceptionMapper.ErrorResponse) response.getEntity();
         assertThat(body.title()).contains("unknown");
     }
 }
