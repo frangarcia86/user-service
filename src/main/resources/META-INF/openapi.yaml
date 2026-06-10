@@ -126,7 +126,6 @@ paths:
               $ref: '#/components/schemas/UpdateUserRequest'
             example:
               name: "Fran García"
-              email: "fran@company.com"
               birthDate: "1990-06-15"
               phone: "+34 600 000 000"
               address: "Calle Mayor 1, Madrid"
@@ -292,17 +291,12 @@ components:
       type: object
       required:
         - name
-        - email
       properties:
         name:
           type: string
           minLength: 2
           maxLength: 100
           example: "Fran García"
-        email:
-          type: string
-          format: email
-          example: "fran@company.com"
         birthDate:
           type: string
           format: date
@@ -328,10 +322,6 @@ components:
           minLength: 2
           maxLength: 100
           example: "Fran García"
-        email:
-          type: string
-          format: email
-          example: "fran@company.com"
         birthDate:
           type: string
           format: date
