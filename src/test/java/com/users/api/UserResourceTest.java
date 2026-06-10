@@ -10,7 +10,6 @@ import static org.mockito.Mockito.when;
 import java.net.URI;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -24,11 +23,11 @@ import com.users.api.dto.PatchUserRequest;
 import com.users.api.dto.UpdateUserRequest;
 import com.users.api.dto.UserResponse;
 import com.users.api.mapper.UserDtoMapper;
+import com.users.application.usecase.CompleteUpdateUserUseCase;
 import com.users.application.usecase.CreateUserUseCase;
 import com.users.application.usecase.DeleteUserUseCase;
 import com.users.application.usecase.GetUserByIdUseCase;
-import com.users.application.usecase.PatchUserUseCase;
-import com.users.application.usecase.UpdateUserUseCase;
+import com.users.application.usecase.PartialUpdateUserUseCase;
 import com.users.application.usecase.UserUpdateData;
 import com.users.domain.exception.UserNotFoundException;
 import com.users.domain.model.User;
@@ -45,10 +44,10 @@ class UserResourceTest {
     GetUserByIdUseCase getUserByIdUseCase;
 
     @Mock
-    UpdateUserUseCase updateUserUseCase;
+    CompleteUpdateUserUseCase updateUserUseCase;
 
     @Mock
-    PatchUserUseCase patchUserUseCase;
+    PartialUpdateUserUseCase patchUserUseCase;
 
     @Mock
     DeleteUserUseCase deleteUserUseCase;
@@ -127,7 +126,7 @@ class UserResourceTest {
                 .build();
 
         // Arrange: use case and mapper behavior
-        when(getUserByIdUseCase.execute(id)).thenReturn(Optional.of(user));
+        when(getUserByIdUseCase.execute(id)).thenReturn(user);
         when(userDtoMapper.toResponse(user)).thenReturn(responseBody);
 
         // Act: execute resource method
@@ -146,9 +145,9 @@ class UserResourceTest {
         // Arrange: repository returns nothing for the requested id
         UUID id = UUID.randomUUID();
 
-        when(getUserByIdUseCase.execute(id)).thenReturn(Optional.empty());
+        when(getUserByIdUseCase.execute(id)).thenThrow(new UserNotFoundException(id));
 
-        // Act + Assert: resource throws domain exception
+        // Act + Assert: use case throws domain exception
         assertThatThrownBy(() -> userResource.getUserById(id))
                 .isInstanceOf(UserNotFoundException.class);
 

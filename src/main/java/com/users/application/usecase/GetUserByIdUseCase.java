@@ -1,8 +1,8 @@
 package com.users.application.usecase;
 
-import java.util.Optional;
 import java.util.UUID;
 
+import com.users.domain.exception.UserNotFoundException;
 import com.users.domain.model.User;
 import com.users.domain.repository.UserRepository;
 
@@ -15,7 +15,8 @@ public class GetUserByIdUseCase {
     @Inject
     UserRepository userRepository;
 
-    public Optional<User> execute(UUID id) {
-        return userRepository.findUserById(id);
+    public User execute(UUID id) {
+        return userRepository.findUserById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
     }
 }

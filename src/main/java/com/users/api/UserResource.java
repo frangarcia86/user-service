@@ -8,12 +8,11 @@ import com.users.api.dto.PatchUserRequest;
 import com.users.api.dto.UpdateUserRequest;
 import com.users.api.dto.UserResponse;
 import com.users.api.mapper.UserDtoMapper;
+import com.users.application.usecase.CompleteUpdateUserUseCase;
 import com.users.application.usecase.CreateUserUseCase;
 import com.users.application.usecase.DeleteUserUseCase;
 import com.users.application.usecase.GetUserByIdUseCase;
-import com.users.application.usecase.PatchUserUseCase;
-import com.users.application.usecase.UpdateUserUseCase;
-import com.users.domain.exception.UserNotFoundException;
+import com.users.application.usecase.PartialUpdateUserUseCase;
 import com.users.domain.model.User;
 
 import jakarta.inject.Inject;
@@ -42,10 +41,10 @@ public class UserResource {
 	GetUserByIdUseCase getUserByIdUseCase;
 
 	@Inject
-	UpdateUserUseCase updateUserUseCase;
+	CompleteUpdateUserUseCase updateUserUseCase;
 
 	@Inject
-	PatchUserUseCase patchUserUseCase;
+	PartialUpdateUserUseCase patchUserUseCase;
 
 	@Inject
 	DeleteUserUseCase deleteUserUseCase;
@@ -56,8 +55,8 @@ public class UserResource {
 	@POST
 	public Response createUser(@Valid CreateUserRequest request) {
 		User createdUser = createUserUseCase.execute(userDtoMapper.toDomain(request));
+		
 		UserResponse response = userDtoMapper.toResponse(createdUser);
-
 		return Response.created(URI.create("/users/" + createdUser.getId()))
 				.entity(response)
 				.build();
@@ -66,9 +65,8 @@ public class UserResource {
 	@GET
 	@Path("/{id}")
 	public Response getUserById(@PathParam("id") UUID id) {
-		User user = getUserByIdUseCase.execute(id)
-				.orElseThrow(() -> new UserNotFoundException(id));
-
+		User user = getUserByIdUseCase.execute(id);
+		
 		UserResponse response = userDtoMapper.toResponse(user);
 		return Response.ok(response).build();
 	}
@@ -77,6 +75,7 @@ public class UserResource {
 	@Path("/{id}")
 	public Response updateUser(@PathParam("id") UUID id, @Valid UpdateUserRequest request) {
 		User updatedUser = updateUserUseCase.execute(id, userDtoMapper.toUpdateData(request));
+		
 		UserResponse response = userDtoMapper.toResponse(updatedUser);
 		return Response.ok(response).build();
 	}
@@ -85,6 +84,7 @@ public class UserResource {
 	@Path("/{id}")
 	public Response patchUser(@PathParam("id") UUID id, @Valid PatchUserRequest request) {
 		User patchedUser = patchUserUseCase.execute(id, userDtoMapper.toUpdateData(request));
+		
 		UserResponse response = userDtoMapper.toResponse(patchedUser);
 		return Response.ok(response).build();
 	}
@@ -93,6 +93,7 @@ public class UserResource {
 	@Path("/{id}")
 	public Response deleteUser(@PathParam("id") UUID id) {
 		deleteUserUseCase.execute(id);
+		
 		return Response.noContent().build();
 	}
 }

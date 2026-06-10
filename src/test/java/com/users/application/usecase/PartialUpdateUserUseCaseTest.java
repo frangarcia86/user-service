@@ -20,13 +20,13 @@ import com.users.domain.model.User;
 import com.users.domain.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
-class PatchUserUseCaseTest {
+class PartialUpdateUserUseCaseTest {
 
     @Mock
     UserRepository userRepository;
 
     @InjectMocks
-    PatchUserUseCase patchUserUseCase;
+    PartialUpdateUserUseCase patchUserUseCase;
 
     @Test
     void execute_appliesOnlyProvidedFields() {
