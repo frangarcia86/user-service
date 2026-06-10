@@ -37,4 +37,23 @@ public class UserRepositoryImpl
     public boolean existsByEmail(String email) {
         return count("email", email) > 0;
     }
+
+    @Override
+    public User update(User user) {
+        UserEntity entity = findById(user.getId());
+        mapper.updateEntity(user, entity);
+        return mapper.toDomain(entity);
+    }
+
+    @Override
+    public User replace(User user) {
+        UserEntity entity = findById(user.getId());
+        mapper.replaceEntity(user, entity);
+        return mapper.toDomain(entity);
+    }
+
+    @Override
+    public void removeById(UUID id) {
+        deleteById(id);
+    }
 }

@@ -29,8 +29,7 @@ class UserNotFoundExceptionMapperTest {
 
         Response response = mapper.toResponse(exception);
 
-        assertThat(response.getEntity()).isInstanceOf(ErrorResponse.class);
-        ErrorResponse body = (ErrorResponse) response.getEntity();
+        var body = (BaseExceptionMapper.ErrorResponse) response.getEntity();
         assertThat(body.title()).isEqualTo("User Not Found");
         assertThat(body.status()).isEqualTo(404);
     }

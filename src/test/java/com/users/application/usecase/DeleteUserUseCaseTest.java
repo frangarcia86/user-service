@@ -1,6 +1,5 @@
 package com.users.application.usecase;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -19,34 +18,39 @@ import com.users.domain.model.User;
 import com.users.domain.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
-class GetUserByIdUseCaseTest {
+class DeleteUserUseCaseTest {
 
     @Mock
     UserRepository userRepository;
 
     @InjectMocks
-    GetUserByIdUseCase getUserByIdUseCase;
+    DeleteUserUseCase deleteUserUseCase;
 
     @Test
-    void execute_returnsUser_whenFound() {
+    void execute_deletesUserWhenExists() {
+        // Arrange
         UUID id = UUID.randomUUID();
-        User user = new User(id, "Isabel Fernandez", "isabel.fernandez@mail.com");
+        User user = new User(id, "Anton", "antonio@mail.com");
 
         when(userRepository.findUserById(id)).thenReturn(Optional.of(user));
 
-        User result = getUserByIdUseCase.execute(id);
+        // Act
+        deleteUserUseCase.execute(id);
 
-        assertThat(result).isEqualTo(user);
+        // Assert
         verify(userRepository).findUserById(id);
+        verify(userRepository).removeById(id);
     }
 
     @Test
-    void execute_throwsUserNotFoundException_whenNotFound() {
+    void execute_throwsUserNotFoundException_whenUserDoesNotExist() {
+        // Arrange
         UUID id = UUID.randomUUID();
 
         when(userRepository.findUserById(id)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> getUserByIdUseCase.execute(id))
+        // Act + Assert
+        assertThatThrownBy(() -> deleteUserUseCase.execute(id))
                 .isInstanceOf(UserNotFoundException.class);
 
         verify(userRepository).findUserById(id);

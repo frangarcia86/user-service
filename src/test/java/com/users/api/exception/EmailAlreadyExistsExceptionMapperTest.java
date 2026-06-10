@@ -27,8 +27,7 @@ class EmailAlreadyExistsExceptionMapperTest {
 
         Response response = mapper.toResponse(exception);
 
-        assertThat(response.getEntity()).isInstanceOf(ErrorResponse.class);
-        ErrorResponse body = (ErrorResponse) response.getEntity();
+        var body = (BaseExceptionMapper.ErrorResponse) response.getEntity();
         assertThat(body.title()).isEqualTo("Email Already Exists");
         assertThat(body.status()).isEqualTo(409);
     }
