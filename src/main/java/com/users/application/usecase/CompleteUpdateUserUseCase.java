@@ -28,6 +28,6 @@ public class CompleteUpdateUserUseCase {
 
         userUpdateMapper.applyUpdate(data, existing);
 
-        return userRepository.update(existing);
+        return userRepository.replace(existing);
     }
 }

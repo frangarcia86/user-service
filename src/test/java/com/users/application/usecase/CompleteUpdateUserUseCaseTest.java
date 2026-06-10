@@ -54,7 +54,7 @@ class CompleteUpdateUserUseCaseTest {
         saved.setPostalCode(14001);
 
         when(userRepository.findUserById(id)).thenReturn(Optional.of(existing));
-        when(userRepository.update(existing)).thenReturn(saved);
+        when(userRepository.replace(existing)).thenReturn(saved);
 
         // Act
         User result = updateUserUseCase.execute(id, data);
@@ -63,7 +63,7 @@ class CompleteUpdateUserUseCaseTest {
         assertThat(result).isEqualTo(saved);
         verify(userRepository).findUserById(id);
         verify(userUpdateMapper).applyUpdate(data, existing);
-        verify(userRepository).update(existing);
+        verify(userRepository).replace(existing);
     }
 
     @Test

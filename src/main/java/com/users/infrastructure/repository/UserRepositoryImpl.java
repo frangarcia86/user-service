@@ -46,6 +46,13 @@ public class UserRepositoryImpl
     }
 
     @Override
+    public User replace(User user) {
+        UserEntity entity = findById(user.getId());
+        mapper.replaceEntity(user, entity);
+        return mapper.toDomain(entity);
+    }
+
+    @Override
     public void removeById(UUID id) {
         deleteById(id);
     }

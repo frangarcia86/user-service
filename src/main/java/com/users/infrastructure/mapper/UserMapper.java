@@ -20,4 +20,9 @@ public interface UserMapper {
     @Mapping(target = "email", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     void updateEntity(User user, @MappingTarget UserEntity entity);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "email", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    void replaceEntity(User user, @MappingTarget UserEntity entity);
 }

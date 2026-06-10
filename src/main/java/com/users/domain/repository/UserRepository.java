@@ -10,5 +10,6 @@ public interface UserRepository {
     Optional<User> findUserById(UUID id);
     boolean existsByEmail(String email);
     User update(User user);
+    User replace(User user);
     void removeById(UUID id);
 }
