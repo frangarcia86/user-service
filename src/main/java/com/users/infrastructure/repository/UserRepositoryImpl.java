@@ -47,6 +47,6 @@ public class UserRepositoryImpl
 
     @Override
     public void removeById(UUID id) {
-        delete("id = ?1", id);
+        deleteById(id);
     }
 }
