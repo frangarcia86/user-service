@@ -5,6 +5,7 @@ import java.util.UUID;
 import com.users.domain.exception.UserNotFoundException;
 import com.users.domain.repository.UserRepository;
 
+import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -17,9 +18,12 @@ public class DeleteUserUseCase {
 
     @Transactional
     public void execute(UUID id) {
+        Log.debugf("Looking up user for deletion with id: %s", id);
         if (userRepository.findUserById(id).isEmpty()) {
+            Log.warnf("User not found for deletion with id: %s", id);
             throw new UserNotFoundException(id);
         }
         userRepository.removeById(id);
+        Log.infof("User deleted with id: %s", id);
     }
 }

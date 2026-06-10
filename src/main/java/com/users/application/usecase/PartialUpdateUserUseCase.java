@@ -8,6 +8,7 @@ import com.users.domain.exception.UserNotFoundException;
 import com.users.domain.model.User;
 import com.users.domain.repository.UserRepository;
 
+import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -23,11 +24,14 @@ public class PartialUpdateUserUseCase {
 
     @Transactional
     public User execute(UUID id, UserUpdateData data) {
+        Log.debugf("Looking up user for partial update with id: %s", id);
         User existing = userRepository.findUserById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
 
         userUpdateMapper.applyPartialUpdate(data, existing);
 
-        return userRepository.update(existing);
+        User updated = userRepository.update(existing);
+        Log.infof("User partially updated with id: %s", id);
+        return updated;
     }
 }

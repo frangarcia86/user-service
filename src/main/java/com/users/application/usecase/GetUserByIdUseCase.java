@@ -6,6 +6,7 @@ import com.users.domain.exception.UserNotFoundException;
 import com.users.domain.model.User;
 import com.users.domain.repository.UserRepository;
 
+import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -16,7 +17,10 @@ public class GetUserByIdUseCase {
     UserRepository userRepository;
 
     public User execute(UUID id) {
-        return userRepository.findUserById(id)
+        Log.debugf("Looking up user with id: %s", id);
+        User user = userRepository.findUserById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
+        Log.debugf("User found with id: %s", id);
+        return user;
     }
 }

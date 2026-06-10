@@ -10,6 +10,7 @@ import com.users.infrastructure.mapper.UserMapper;
 import com.users.infrastructure.persistence.UserEntity;
 
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
+import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -22,9 +23,11 @@ public class UserRepositoryImpl
 
     @Override
     public User save(User user) {
+        Log.debugf("Persisting user with email: %s", user.getEmail());
         UserEntity entity = mapper.toEntity(user);
         entity.setCreatedAt(Instant.now());
         persist(entity);
+        Log.debugf("User persisted with id: %s", entity.getId());
         return mapper.toDomain(entity);
     }
 
@@ -40,6 +43,7 @@ public class UserRepositoryImpl
 
     @Override
     public User update(User user) {
+        Log.debugf("Updating entity for user id: %s", user.getId());
         UserEntity entity = findById(user.getId());
         mapper.updateEntity(user, entity);
         return mapper.toDomain(entity);
@@ -47,6 +51,7 @@ public class UserRepositoryImpl
 
     @Override
     public User replace(User user) {
+        Log.debugf("Replacing entity for user id: %s", user.getId());
         UserEntity entity = findById(user.getId());
         mapper.replaceEntity(user, entity);
         return mapper.toDomain(entity);
@@ -54,6 +59,7 @@ public class UserRepositoryImpl
 
     @Override
     public void removeById(UUID id) {
+        Log.debugf("Removing user with id: %s", id);
         deleteById(id);
     }
 }

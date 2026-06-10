@@ -15,6 +15,7 @@ import com.users.application.usecase.GetUserByIdUseCase;
 import com.users.application.usecase.PartialUpdateUserUseCase;
 import com.users.domain.model.User;
 
+import io.quarkus.logging.Log;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
@@ -54,9 +55,11 @@ public class UserResource {
 
 	@POST
 	public Response createUser(@Valid CreateUserRequest request) {
+		Log.infof("Creating user with email: %s", request.getEmail());
 		User createdUser = createUserUseCase.execute(userDtoMapper.toDomain(request));
 		
 		UserResponse response = userDtoMapper.toResponse(createdUser);
+		Log.infof("User created with id: %s", createdUser.getId());
 		return Response.created(URI.create("/users/" + createdUser.getId()))
 				.entity(response)
 				.build();
@@ -65,35 +68,43 @@ public class UserResource {
 	@GET
 	@Path("/{id}")
 	public Response getUserById(@PathParam("id") UUID id) {
+		Log.debugf("Fetching user with id: %s", id);
 		User user = getUserByIdUseCase.execute(id);
 		
 		UserResponse response = userDtoMapper.toResponse(user);
+		Log.debugf("Returning user with id: %s", id);
 		return Response.ok(response).build();
 	}
 
 	@PUT
 	@Path("/{id}")
 	public Response updateUser(@PathParam("id") UUID id, @Valid UpdateUserRequest request) {
+		Log.infof("Replacing user with id: %s", id);
 		User updatedUser = updateUserUseCase.execute(id, userDtoMapper.toUpdateData(request));
 		
 		UserResponse response = userDtoMapper.toResponse(updatedUser);
+		Log.infof("User replaced with id: %s", id);
 		return Response.ok(response).build();
 	}
 
 	@PATCH
 	@Path("/{id}")
 	public Response patchUser(@PathParam("id") UUID id, @Valid PatchUserRequest request) {
+		Log.infof("Patching user with id: %s", id);
 		User patchedUser = patchUserUseCase.execute(id, userDtoMapper.toUpdateData(request));
 		
 		UserResponse response = userDtoMapper.toResponse(patchedUser);
+		Log.infof("User patched with id: %s", id);
 		return Response.ok(response).build();
 	}
 
 	@DELETE
 	@Path("/{id}")
 	public Response deleteUser(@PathParam("id") UUID id) {
+		Log.infof("Deleting user with id: %s", id);
 		deleteUserUseCase.execute(id);
 		
+		Log.infof("User deleted with id: %s", id);
 		return Response.noContent().build();
 	}
 }

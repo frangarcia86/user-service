@@ -8,6 +8,7 @@ import com.users.domain.exception.UserNotFoundException;
 import com.users.domain.model.User;
 import com.users.domain.repository.UserRepository;
 
+import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -23,11 +24,14 @@ public class CompleteUpdateUserUseCase {
 
     @Transactional
     public User execute(UUID id, UserUpdateData data) {
+        Log.debugf("Looking up user for full update with id: %s", id);
         User existing = userRepository.findUserById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
 
         userUpdateMapper.applyUpdate(data, existing);
 
-        return userRepository.replace(existing);
+        User replaced = userRepository.replace(existing);
+        Log.infof("User fully updated with id: %s", id);
+        return replaced;
     }
 }
