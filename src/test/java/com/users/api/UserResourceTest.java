@@ -23,12 +23,12 @@ import com.users.api.dto.PatchUserRequest;
 import com.users.api.dto.UpdateUserRequest;
 import com.users.api.dto.UserResponse;
 import com.users.api.mapper.UserDtoMapper;
+import com.users.application.dto.UserUpdateData;
 import com.users.application.usecase.CompleteUpdateUserUseCase;
 import com.users.application.usecase.CreateUserUseCase;
 import com.users.application.usecase.DeleteUserUseCase;
 import com.users.application.usecase.GetUserByIdUseCase;
 import com.users.application.usecase.PartialUpdateUserUseCase;
-import com.users.application.usecase.UserUpdateData;
 import com.users.domain.exception.UserNotFoundException;
 import com.users.domain.model.User;
 

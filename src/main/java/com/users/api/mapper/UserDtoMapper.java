@@ -10,7 +10,7 @@ import com.users.api.dto.CreateUserRequest;
 import com.users.api.dto.PatchUserRequest;
 import com.users.api.dto.UpdateUserRequest;
 import com.users.api.dto.UserResponse;
-import com.users.application.usecase.UserUpdateData;
+import com.users.application.dto.UserUpdateData;
 import com.users.domain.model.User;
 
 @Mapper(

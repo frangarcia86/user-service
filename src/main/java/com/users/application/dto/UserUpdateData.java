@@ -1,4 +1,4 @@
-package com.users.application.usecase;
+package com.users.application.dto;
 
 import java.time.LocalDate;
 

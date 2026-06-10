@@ -15,6 +15,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.users.application.dto.UserUpdateData;
+import com.users.application.mapper.UserUpdateMapper;
 import com.users.domain.exception.UserNotFoundException;
 import com.users.domain.model.User;
 import com.users.domain.repository.UserRepository;
@@ -24,6 +26,9 @@ class CompleteUpdateUserUseCaseTest {
 
     @Mock
     UserRepository userRepository;
+
+    @Mock
+    UserUpdateMapper userUpdateMapper;
 
     @InjectMocks
     CompleteUpdateUserUseCase updateUserUseCase;
@@ -57,6 +62,7 @@ class CompleteUpdateUserUseCaseTest {
         // Assert
         assertThat(result).isEqualTo(saved);
         verify(userRepository).findUserById(id);
+        verify(userUpdateMapper).applyUpdate(data, existing);
         verify(userRepository).update(existing);
     }
 

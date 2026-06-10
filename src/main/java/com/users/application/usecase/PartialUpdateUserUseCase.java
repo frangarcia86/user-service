@@ -2,6 +2,8 @@ package com.users.application.usecase;
 
 import java.util.UUID;
 
+import com.users.application.dto.UserUpdateData;
+import com.users.application.mapper.UserUpdateMapper;
 import com.users.domain.exception.UserNotFoundException;
 import com.users.domain.model.User;
 import com.users.domain.repository.UserRepository;
@@ -16,16 +18,15 @@ public class PartialUpdateUserUseCase {
     @Inject
     UserRepository userRepository;
 
+    @Inject
+    UserUpdateMapper userUpdateMapper;
+
     @Transactional
     public User execute(UUID id, UserUpdateData data) {
         User existing = userRepository.findUserById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
 
-        if (data.name() != null) existing.setName(data.name());
-        if (data.birthDate() != null) existing.setBirthDate(data.birthDate());
-        if (data.phone() != null) existing.setPhone(data.phone());
-        if (data.address() != null) existing.setAddress(data.address());
-        if (data.postalCode() != null) existing.setPostalCode(data.postalCode());
+        userUpdateMapper.applyPartialUpdate(data, existing);
 
         return userRepository.update(existing);
     }
