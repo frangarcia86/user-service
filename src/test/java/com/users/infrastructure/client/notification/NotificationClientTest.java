@@ -1,4 +1,4 @@
-package com.users.infrastructure.client;
+package com.users.infrastructure.client.notification;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.ArgumentMatchers.argThat;

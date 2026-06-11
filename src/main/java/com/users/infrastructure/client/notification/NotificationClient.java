@@ -1,9 +1,9 @@
-package com.users.infrastructure.client;
+package com.users.infrastructure.client.notification;
 
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import com.users.domain.model.User;
-import com.users.domain.port.NotificationPort;
+import com.users.domain.port.notification.NotificationPort;
 import com.users.infrastructure.client.notification.dto.AccessAlertRequest;
 import com.users.infrastructure.client.notification.rest.NotificationRestClient;
 

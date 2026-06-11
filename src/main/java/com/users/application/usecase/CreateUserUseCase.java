@@ -2,9 +2,9 @@ package com.users.application.usecase;
 
 import com.users.domain.exception.EmailAlreadyExistsException;
 import com.users.domain.model.User;
-import com.users.domain.port.AddressVerificationPort;
-import com.users.domain.port.AddressVerificationResult;
-import com.users.domain.repository.UserRepository;
+import com.users.domain.port.address.AddressVerificationPort;
+import com.users.domain.port.address.AddressVerificationResult;
+import com.users.domain.port.persistence.UserRepository;
 
 import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -23,7 +23,6 @@ public class CreateUserUseCase {
     @Transactional
     public User execute(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
-            Log.warnf("Email already exists: %s", user.getEmail());
             throw new EmailAlreadyExistsException(user.getEmail());
         }
 

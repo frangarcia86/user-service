@@ -1,4 +1,4 @@
-package com.users.domain.port;
+package com.users.domain.port.address;
 
 import com.users.domain.model.User;
 

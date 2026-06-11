@@ -17,9 +17,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.users.domain.exception.EmailAlreadyExistsException;
 import com.users.domain.model.User;
-import com.users.domain.port.AddressVerificationPort;
-import com.users.domain.port.AddressVerificationResult;
-import com.users.domain.repository.UserRepository;
+import com.users.domain.port.address.AddressVerificationPort;
+import com.users.domain.port.address.AddressVerificationResult;
+import com.users.domain.port.persistence.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
 class CreateUserUseCaseTest {

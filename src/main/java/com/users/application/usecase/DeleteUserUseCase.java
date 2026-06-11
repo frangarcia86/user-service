@@ -3,7 +3,7 @@ package com.users.application.usecase;
 import java.util.UUID;
 
 import com.users.domain.exception.UserNotFoundException;
-import com.users.domain.repository.UserRepository;
+import com.users.domain.port.persistence.UserRepository;
 
 import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,7 +19,6 @@ public class DeleteUserUseCase {
     @Transactional
     public void execute(UUID id) {
         if (userRepository.findUserById(id).isEmpty()) {
-            Log.warnf("User not found for deletion with id: %s", id);
             throw new UserNotFoundException(id);
         }
 

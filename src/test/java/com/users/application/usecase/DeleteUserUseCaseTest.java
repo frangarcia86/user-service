@@ -15,7 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.users.domain.exception.UserNotFoundException;
 import com.users.domain.model.User;
-import com.users.domain.repository.UserRepository;
+import com.users.domain.port.persistence.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
 class DeleteUserUseCaseTest {

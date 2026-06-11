@@ -3,8 +3,8 @@ package com.users.infrastructure.client.address;
 import java.util.Random;
 
 import com.users.domain.model.User;
-import com.users.domain.port.AddressVerificationPort;
-import com.users.domain.port.AddressVerificationResult;
+import com.users.domain.port.address.AddressVerificationPort;
+import com.users.domain.port.address.AddressVerificationResult;
 
 import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;

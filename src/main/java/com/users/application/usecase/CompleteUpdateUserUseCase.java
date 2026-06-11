@@ -6,7 +6,7 @@ import com.users.application.dto.UserUpdateData;
 import com.users.application.mapper.UserUpdateMapper;
 import com.users.domain.exception.UserNotFoundException;
 import com.users.domain.model.User;
-import com.users.domain.repository.UserRepository;
+import com.users.domain.port.persistence.UserRepository;
 
 import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
