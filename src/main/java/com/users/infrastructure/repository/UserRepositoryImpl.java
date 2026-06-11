@@ -10,6 +10,7 @@ import com.users.infrastructure.mapper.UserEntityMapper;
 import com.users.infrastructure.persistence.UserEntity;
 
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
+import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -25,6 +26,7 @@ public class UserRepositoryImpl
         UserEntity entity = mapper.toEntity(user);
         entity.setCreatedAt(Instant.now());
         persist(entity);
+        
         Log.debugf("User persisted with id: %s", entity.getId());
         return mapper.toDomain(entity);
     }

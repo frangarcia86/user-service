@@ -27,7 +27,7 @@ public class NotificationClient implements NotificationPort {
                 .name(user.getName())
                 .build();
 
-        // Notification Service is simulated — no real endpoint exists for this demo.
+        // Notification Service is simulated (no real endpoint exists)
         try (Response response = notificationRestClient.sendAccessAlert(request)) {
             Log.infof("Access alert sent for user %s (status=%d)", user.getId(), response.getStatus());
         } catch (Exception e) {

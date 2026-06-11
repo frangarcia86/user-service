@@ -16,8 +16,6 @@ public class AddressVerificationClient implements AddressVerificationPort {
 
     // TODO replace this stub with a real REST client to the Address Verification Service
     //      (POST /address/verify -> normalised address + resolved postal code).
-    //      Out of scope for this demo.
-
     @Override
     public AddressVerificationResult verify(User user) {
         Log.infof("Verifying address for user %s", user.getId());
@@ -30,8 +28,6 @@ public class AddressVerificationClient implements AddressVerificationPort {
             Log.infof("No postal code provided for user '%s' — resolved to %d from address",
                     user.getName(), resolvedPostalCode);
         }
-
-        // TODO: POST /address/verify
         
         return new AddressVerificationResult(verifiedAddress, resolvedPostalCode);
     }
