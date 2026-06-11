@@ -7,7 +7,7 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
 import com.users.domain.model.User;
-import com.users.domain.port.AddressVerificationResult;
+import com.users.domain.port.address.AddressVerificationResult;
 
 class AddressVerificationClientTest {
 

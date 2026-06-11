@@ -1,13 +1,13 @@
-package com.users.infrastructure.repository;
+package com.users.infrastructure.persistence.repository;
 
 import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
 import com.users.domain.model.User;
-import com.users.domain.repository.UserRepository;
-import com.users.infrastructure.mapper.UserEntityMapper;
-import com.users.infrastructure.persistence.UserEntity;
+import com.users.domain.port.persistence.UserRepository;
+import com.users.infrastructure.persistence.entity.UserEntity;
+import com.users.infrastructure.persistence.mapper.UserEntityMapper;
 
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import io.quarkus.logging.Log;
@@ -26,7 +26,7 @@ public class UserRepositoryImpl
         UserEntity entity = mapper.toEntity(user);
         entity.setCreatedAt(Instant.now());
         persist(entity);
-        
+
         Log.debugf("User persisted with id: %s", entity.getId());
         return mapper.toDomain(entity);
     }
@@ -43,9 +43,9 @@ public class UserRepositoryImpl
 
     @Override
     public User update(User user) {
-        Log.debugf("Updating entity for user id: %s", user.getId());
         UserEntity entity = findById(user.getId());
         mapper.updateEntity(user, entity);
+        
         return mapper.toDomain(entity);
     }
 
@@ -53,6 +53,7 @@ public class UserRepositoryImpl
     public User replace(User user) {
         UserEntity entity = findById(user.getId());
         mapper.replaceEntity(user, entity);
+        
         return mapper.toDomain(entity);
     }
 

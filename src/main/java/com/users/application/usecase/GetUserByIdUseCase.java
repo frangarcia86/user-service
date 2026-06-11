@@ -8,8 +8,8 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import com.users.domain.exception.UserNotFoundException;
 import com.users.domain.model.User;
-import com.users.domain.port.NotificationPort;
-import com.users.domain.repository.UserRepository;
+import com.users.domain.port.notification.NotificationPort;
+import com.users.domain.port.persistence.UserRepository;
 
 import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;

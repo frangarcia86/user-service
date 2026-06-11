@@ -1,4 +1,4 @@
-package com.users.infrastructure.mapper;
+package com.users.infrastructure.persistence.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
 import com.users.domain.model.User;
-import com.users.infrastructure.persistence.UserEntity;
+import com.users.infrastructure.persistence.entity.UserEntity;
 
 class UserEntityMapperTest {
 

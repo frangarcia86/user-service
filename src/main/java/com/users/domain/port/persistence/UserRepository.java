@@ -1,4 +1,4 @@
-package com.users.domain.repository;
+package com.users.domain.port.persistence;
 
 import java.util.Optional;
 import java.util.UUID;
