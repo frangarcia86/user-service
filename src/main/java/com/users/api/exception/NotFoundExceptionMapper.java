@@ -5,7 +5,7 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.Provider;
 
 @Provider
-public class InvalidRequestExceptionMapper extends BaseExceptionMapper<NotFoundException> {
+public class NotFoundExceptionMapper extends BaseExceptionMapper<NotFoundException> {
 
     @Override
     public Response toResponse(NotFoundException exception) {

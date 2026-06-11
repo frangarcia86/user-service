@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "id")
 public abstract class AggregateRoot {
 
     private final UUID id;

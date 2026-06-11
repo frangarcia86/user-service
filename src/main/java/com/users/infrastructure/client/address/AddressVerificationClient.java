@@ -25,7 +25,7 @@ public class AddressVerificationClient implements AddressVerificationPort {
 
         if (resolvedPostalCode == null) {
             resolvedPostalCode = 10000 + RANDOM.nextInt(90000);
-            Log.infof("No postal code provided for user '%s' — resolved to %d from address",
+            Log.infof("No postal code provided for user '%s', resolved to %d from address",
                     user.getName(), resolvedPostalCode);
         }
         

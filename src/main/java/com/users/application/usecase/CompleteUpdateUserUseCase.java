@@ -30,7 +30,7 @@ public class CompleteUpdateUserUseCase {
         userUpdateMapper.applyUpdate(data, existing);
         User replaced = userRepository.replace(existing);
         
-        Log.infof("User replaced: %s", id);
+        Log.infof("Replaced user %s", id);
         return replaced;
     }
 }

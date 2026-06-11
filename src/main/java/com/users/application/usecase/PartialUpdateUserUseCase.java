@@ -30,7 +30,7 @@ public class PartialUpdateUserUseCase {
         userUpdateMapper.applyPartialUpdate(data, existing);
         User updated = userRepository.update(existing);
         
-        Log.infof("User patched: %s", id);
+        Log.infof("Applied partial update to user %s", id);
         return updated;
     }
 }
