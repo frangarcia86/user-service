@@ -66,6 +66,8 @@ External REST clients live in `src/main/resources/clients.properties`.
 
 Datasource and HTTP port (defined in `application.properties`):
 
+Every push to `main` is automatically deployed to production on Render.
+
 ## Architecture
 
 Hexagonal-ish layering with one inbound adapter (REST) and three outbound ports (persistence, notification, address verification):
