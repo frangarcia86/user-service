@@ -15,7 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.users.domain.exception.UserNotFoundException;
 import com.users.domain.model.User;
-import com.users.domain.repository.UserRepository;
+import com.users.domain.port.persistence.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
 class DeleteUserUseCaseTest {
@@ -27,29 +27,24 @@ class DeleteUserUseCaseTest {
     DeleteUserUseCase deleteUserUseCase;
 
     @Test
-    void execute_deletesUserWhenExists() {
-        // Arrange
+    void deletesExistingUser() {
         UUID id = UUID.randomUUID();
         User user = new User(id, "Anton", "antonio@mail.com");
 
         when(userRepository.findUserById(id)).thenReturn(Optional.of(user));
 
-        // Act
         deleteUserUseCase.execute(id);
 
-        // Assert
         verify(userRepository).findUserById(id);
         verify(userRepository).removeById(id);
     }
 
     @Test
-    void execute_throwsUserNotFoundException_whenUserDoesNotExist() {
-        // Arrange
+    void throwsWhenUserNotFound() {
         UUID id = UUID.randomUUID();
 
         when(userRepository.findUserById(id)).thenReturn(Optional.empty());
 
-        // Act + Assert
         assertThatThrownBy(() -> deleteUserUseCase.execute(id))
                 .isInstanceOf(UserNotFoundException.class);
 

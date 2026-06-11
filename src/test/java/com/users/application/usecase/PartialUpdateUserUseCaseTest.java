@@ -19,7 +19,7 @@ import com.users.application.dto.UserUpdateData;
 import com.users.application.mapper.UserUpdateMapper;
 import com.users.domain.exception.UserNotFoundException;
 import com.users.domain.model.User;
-import com.users.domain.repository.UserRepository;
+import com.users.domain.port.persistence.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
 class PartialUpdateUserUseCaseTest {
@@ -34,8 +34,7 @@ class PartialUpdateUserUseCaseTest {
     PartialUpdateUserUseCase patchUserUseCase;
 
     @Test
-    void execute_appliesOnlyProvidedFields() {
-        // Arrange: existing user with original data
+    void appliesOnlyProvidedFields() {
         UUID id = UUID.randomUUID();
         User existing = new User(id, "Nuria Vidal", "nuria.vidal@web.es");
         existing.setPhone("+34633221100");
@@ -48,11 +47,9 @@ class PartialUpdateUserUseCaseTest {
         when(userRepository.findUserById(id)).thenReturn(Optional.of(existing));
         when(userRepository.update(existing)).thenReturn(saved);
 
-        // Act: only name is patched
         UserUpdateData data = new UserUpdateData("Nuria Vidal Updated", null, null, null, null);
         User result = patchUserUseCase.execute(id, data);
 
-        // Assert
         assertThat(result).isEqualTo(saved);
         verify(userRepository).findUserById(id);
         verify(userUpdateMapper).applyPartialUpdate(data, existing);
@@ -60,8 +57,7 @@ class PartialUpdateUserUseCaseTest {
     }
 
     @Test
-    void execute_appliesAllFieldsWhenAllProvided() {
-        // Arrange
+    void appliesAllFieldsWhenAllProvided() {
         UUID id = UUID.randomUUID();
         User existing = new User(id, "Nuria Vidal", "nuria.vidal@web.es");
 
@@ -74,7 +70,6 @@ class PartialUpdateUserUseCaseTest {
         when(userRepository.findUserById(id)).thenReturn(Optional.of(existing));
         when(userRepository.update(existing)).thenReturn(saved);
 
-        // Act
         UserUpdateData data = new UserUpdateData(
                 "Nuria Vidal Complete",
                 LocalDate.of(1987, 6, 14),
@@ -84,7 +79,6 @@ class PartialUpdateUserUseCaseTest {
         );
         User result = patchUserUseCase.execute(id, data);
 
-        // Assert
         assertThat(result).isEqualTo(saved);
         verify(userRepository).findUserById(id);
         verify(userUpdateMapper).applyPartialUpdate(data, existing);
@@ -92,14 +86,12 @@ class PartialUpdateUserUseCaseTest {
     }
 
     @Test
-    void execute_throwsUserNotFoundException_whenUserDoesNotExist() {
-        // Arrange
+    void throwsWhenUserNotFound() {
         UUID id = UUID.randomUUID();
         UserUpdateData data = new UserUpdateData(null, null, null, null, null);
 
         when(userRepository.findUserById(id)).thenReturn(Optional.empty());
 
-        // Act + Assert
         assertThatThrownBy(() -> patchUserUseCase.execute(id, data))
                 .isInstanceOf(UserNotFoundException.class);
 

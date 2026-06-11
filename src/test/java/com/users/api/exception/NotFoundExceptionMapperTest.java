@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Test;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 
-class InvalidRequestExceptionMapperTest {
+class NotFoundExceptionMapperTest {
 
-    private final InvalidRequestExceptionMapper mapper = new InvalidRequestExceptionMapper();
+    private final NotFoundExceptionMapper mapper = new NotFoundExceptionMapper();
 
     @Test
     void toResponse_returns400_whenCausedByInvalidUuid() {

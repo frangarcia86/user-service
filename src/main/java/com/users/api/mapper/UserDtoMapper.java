@@ -14,18 +14,18 @@ import com.users.application.dto.UserUpdateData;
 import com.users.domain.model.User;
 
 @Mapper(
-		componentModel = MappingConstants.ComponentModel.CDI,
-		imports = {UUID.class}
+        componentModel = MappingConstants.ComponentModel.CDI,
+        imports = {UUID.class}
 )
 public interface UserDtoMapper {
 
-	@Mapping(target = "id", expression = "java(UUID.randomUUID())")
-	@Mapping(target = "createdAt", ignore = true)
-	User toDomain(CreateUserRequest request);
+    @Mapping(target = "id", expression = "java(UUID.randomUUID())")
+    @Mapping(target = "createdAt", ignore = true)
+    User toDomain(CreateUserRequest request);
 
-	UserUpdateData toUpdateData(UpdateUserRequest request);
+    UserUpdateData toUpdateData(UpdateUserRequest request);
 
-	UserUpdateData toUpdateData(PatchUserRequest request);
+    UserUpdateData toUpdateData(PatchUserRequest request);
 
-	UserResponse toResponse(User user);
+    UserResponse toResponse(User user);
 }

@@ -1,4 +1,4 @@
-package com.users.infrastructure.persistence;
+package com.users.infrastructure.persistence.entity;
 
 import java.time.Instant;
 import java.time.LocalDate;
