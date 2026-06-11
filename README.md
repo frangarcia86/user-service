@@ -1,115 +1,139 @@
 # user-service
-Cloud-native microservice for user management
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+Cloud-native microservice for user management. Built with Quarkus 3 on Java 25, PostgreSQL as the production datasource, H2 in-memory for tests.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+## Requirements
 
-## Configuration
+- JDK 25+
+- Docker (for the local PostgreSQL), or your own Postgres if you already have one running
+- Maven wrapper is included, no global Maven install needed
 
-Business rules are defined in `src/main/resources/business.properties` and can be overridden at runtime via environment variables — no redeployment required.
+## Quick start
 
-| Property | Env var | Default | Description |
-|---|---|---|---|
-| `user.access-alert.threshold-seconds` | `ACCESS_ALERT_THRESHOLD_SECONDS` | `60` | Seconds elapsed since user creation after which a GET on that user triggers an access alert notification to their email. |
+Start PostgreSQL:
 
-External REST clients are configured in `src/main/resources/clients.properties`.
+```shell
+docker compose up -d
+```
 
-| Property | Env var | Default | Description |
-|---|---|---|---|
-| `quarkus.rest-client.notification-service.url` | `NOTIFICATION_SERVICE_URL` | `http://localhost:8081` | Base URL for the Notification Service (simulated, no real endpoint exists for this demo). |
+Run the service in dev mode (hot reload):
+
+```shell
+./mvnw quarkus:dev
+```
+
+The API is now available at <http://localhost:8080>. The Dev UI is at <http://localhost:8080/q/dev/>.
+
+To stop the database when you're done: `docker compose down` (add `-v` to also drop the volume).
 
 ## API
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| `POST` | `/users` | Create user |
-| `GET` | `/users/{id}` | Get user by ID |
+| `POST` | `/users` | Create a new user |
+| `GET` | `/users/{id}` | Get a user by ID |
+| `PUT` | `/users/{id}` | Replace a user (full update) |
+| `PATCH` | `/users/{id}` | Update some fields of a user |
+| `DELETE` | `/users/{id}` | Delete a user |
 
-**Swagger UI:**
-- Local: http://localhost:8080/q/swagger-ui
-- Production: https://user-service-1vnl.onrender.com/q/swagger-ui
+Full contract and try-it-out:
+
+- Local Swagger UI: <http://localhost:8080/q/swagger-ui>
+- Production Swagger UI: <https://user-service-1vnl.onrender.com/q/swagger-ui>
+
+A Postman collection and environments live under [postman/](postman/) if you prefer that over Swagger.
 
 ## Health
 
 | Environment | URL |
-|-------------|-----|
-| Local | http://localhost:8080/q/health |
-| Production | https://user-service-1vnl.onrender.com/q/health |
+|---|---|
+| Local | <http://localhost:8080/q/health> |
+| Production | <https://user-service-1vnl.onrender.com/q/health> |
 
-Returns `UP` if the service and database are operational, `DOWN` otherwise.
+Returns `UP` when both the service and the database are reachable.
 
-## Running the application in dev mode
+## Configuration
 
-You can run your application in dev mode that enables live coding using:
+Business rules live in `src/main/resources/business.properties` and can be overridden at runtime via environment variables (no redeployment needed).
 
-```shell script
-./mvnw quarkus:dev
+| Property | Env var | Default | Description |
+|---|---|---|---|
+| `user.access-alert.threshold-seconds` | `ACCESS_ALERT_THRESHOLD_SECONDS` | `60` | Seconds since user creation after which a `GET /users/{id}` triggers an access alert notification to the user's email. |
+
+External REST clients live in `src/main/resources/clients.properties`.
+
+| Property | Env var | Default | Description |
+|---|---|---|---|
+| `quarkus.rest-client.notification-service.url` | `NOTIFICATION_SERVICE_URL` | `http://localhost:8081` | Base URL of the Notification Service. See limitations below. |
+
+Datasource and HTTP port (defined in `application.properties`):
+
+| Property | Env var | Default |
+|---|---|---|
+| `quarkus.datasource.jdbc.url` | `DB_URL` | `jdbc:postgresql://localhost:5432/users` |
+| `quarkus.datasource.username` | `DB_USER` | `postgres` |
+| `quarkus.datasource.password` | `DB_PASSWORD` | `postgres` |
+| `quarkus.http.port` | `PORT` | `8080` |
+
+## Architecture
+
+Hexagonal-ish layering with one inbound adapter (REST) and two outbound ports (persistence and notification):
+
+```
+api/              REST adapter: DTOs, JAX-RS resource, exception mappers
+application/      Use cases (one per operation) + application-level DTOs/mappers
+domain/           Pure domain model, exceptions, repository interface, outbound ports
+infrastructure/   JPA entities, Panache repository impl, REST clients for outbound ports
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+Use cases depend only on the domain. Infrastructure implements the domain ports.
 
-## Packaging and running the application
+## Testing
 
-The application can be packaged using:
+```shell
+./mvnw test
+```
 
-```shell script
+The test profile swaps PostgreSQL for an in-memory H2 (`%test.quarkus.datasource.*`), so you can run the suite without Docker.
+
+What's covered:
+
+- **Unit tests** for every use case and mapper (Mockito + AssertJ)
+- **Integration tests** for each endpoint (`@QuarkusTest` + REST-Assured, hitting the full stack against H2)
+- **Exception mapper tests** for the error response contract
+
+## Packaging
+
+Standard Quarkus jar:
+
+```shell
 ./mvnw package
+java -jar target/quarkus-app/quarkus-run.jar
 ```
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+Über-jar:
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-
-```shell script
+```shell
 ./mvnw package -Dquarkus.package.jar.type=uber-jar
+java -jar target/*-runner.jar
 ```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+Native image (requires GraalVM, or container build):
 
-## Creating a native executable
-
-You can create a native executable using:
-
-```shell script
+```shell
 ./mvnw package -Dnative
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
+# or, without GraalVM installed locally:
 ./mvnw package -Dnative -Dquarkus.native.container-build=true
 ```
 
-You can then execute your native executable with: `./target/user-service-1.0.0-runner`
+Dockerfiles for each variant are under [docker/](docker/).
 
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
+## Known limitations
 
-## Related Guides
+This project is a demo/exercise, not a production-grade service. A few things are intentionally simplified:
 
-- Hibernate ORM with Panache ([guide](https://quarkus.io/guides/hibernate-orm-panache)): Simplified JPA/Hibernate data access layer with active record and repository patterns
-- Hibernate Validator ([guide](https://quarkus.io/guides/validation)): Bean validation using Hibernate Validator and Jakarta Validation annotations
-- SmallRye OpenAPI ([guide](https://quarkus.io/guides/openapi-swaggerui)): Generate OpenAPI schemas and serve Swagger UI for REST API documentation
-- JDBC Driver - PostgreSQL ([guide](https://quarkus.io/guides/datasource)): Connect to the PostgreSQL database via JDBC
-- REST Jackson ([guide](https://quarkus.io/guides/rest#json-serialisation)): Jackson serialization support for Quarkus REST. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it
-
-## Provided Code
-
-### Hibernate ORM
-
-Create your first JPA entity
-
-[Related guide section...](https://quarkus.io/guides/hibernate-orm)
-
-
-[Related Hibernate with Panache section...](https://quarkus.io/guides/hibernate-orm-panache)
-
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+- **Notification service** (`NotificationClient`) points to a non-existing endpoint. The call is fire-and-forget: a failure is logged as a warning but never propagates to the user. In production this should go through a queue or an outbox.
+- **Address verification** (`AddressVerificationClient`) is a stub. It echoes the address back and, when the postal code is missing, generates a random one. Replace with a real REST client before using this anywhere serious.
+- **No list/search endpoint** on `/users` yet. When the dataset grows we'll need pagination and filtering.
+- **No authentication / authorization**. All endpoints are open. Add OIDC / JWT before exposing this beyond the demo.
+- **H2 in tests, Postgres in prod**: the test profile uses H2, which has small SQL dialect differences vs Postgres. Integration tests against a real Postgres (Testcontainers) would catch them.
