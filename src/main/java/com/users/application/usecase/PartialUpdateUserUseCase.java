@@ -29,8 +29,8 @@ public class PartialUpdateUserUseCase {
                 .orElseThrow(() -> new UserNotFoundException(id));
 
         userUpdateMapper.applyPartialUpdate(data, existing);
-
         User updated = userRepository.update(existing);
+        
         Log.infof("User partially updated with id: %s", id);
         return updated;
     }

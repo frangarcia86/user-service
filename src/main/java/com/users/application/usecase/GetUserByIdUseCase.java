@@ -32,6 +32,7 @@ public class GetUserByIdUseCase {
         User user = userRepository.findUserById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
         Log.debugf("User found with id: %s", id);
+
         triggerAccessAlertIfNeeded(user);
         return user;
     }
@@ -40,6 +41,7 @@ public class GetUserByIdUseCase {
         if (user.getCreatedAt() == null) {
             return;
         }
+        
         long secondsSinceCreation = Duration.between(user.getCreatedAt(), Instant.now()).getSeconds();
         if (secondsSinceCreation > accessAlertThresholdSeconds) {
             Log.infof("User '%s' (id: %s) was created %ds ago — triggering access alert",

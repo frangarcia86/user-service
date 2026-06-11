@@ -29,8 +29,8 @@ public class CompleteUpdateUserUseCase {
                 .orElseThrow(() -> new UserNotFoundException(id));
 
         userUpdateMapper.applyUpdate(data, existing);
-
         User replaced = userRepository.replace(existing);
+        
         Log.infof("User fully updated with id: %s", id);
         return replaced;
     }

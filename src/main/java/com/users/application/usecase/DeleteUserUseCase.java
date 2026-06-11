@@ -23,6 +23,7 @@ public class DeleteUserUseCase {
             Log.warnf("User not found for deletion with id: %s", id);
             throw new UserNotFoundException(id);
         }
+        
         userRepository.removeById(id);
         Log.infof("User deleted with id: %s", id);
     }
