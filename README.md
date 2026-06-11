@@ -100,7 +100,7 @@ Use cases depend only on the domain. Infrastructure implements the domain ports.
 ./mvnw test
 ```
 
-The test profile swaps PostgreSQL for an in-memory H2 (`%test.quarkus.datasource.*`), so you can run the suite without Docker.
+The test profile swaps PostgreSQL for an in-memory H2, so you can run the suite without Docker.
 
 What's covered:
 
