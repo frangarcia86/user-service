@@ -54,7 +54,7 @@ Returns `UP` when both the service and the database are reachable.
 
 ## Configuration
 
-Business rules live in `src/main/resources/business.properties` and can be overridden at runtime via environment variables (no redeployment needed).
+Business rules live in `src/main/resources/business.properties` and can be overridden at runtime via environment variables.
 
 | Property | Env var | Default | Description |
 |---|---|---|---|
@@ -67,13 +67,6 @@ External REST clients live in `src/main/resources/clients.properties`.
 | `quarkus.rest-client.notification-service.url` | `NOTIFICATION_SERVICE_URL` | `http://localhost:8081` | Base URL of the Notification Service. See limitations below. |
 
 Datasource and HTTP port (defined in `application.properties`):
-
-| Property | Env var | Default |
-|---|---|---|
-| `quarkus.datasource.jdbc.url` | `DB_URL` | `jdbc:postgresql://localhost:5432/users` |
-| `quarkus.datasource.username` | `DB_USER` | `postgres` |
-| `quarkus.datasource.password` | `DB_PASSWORD` | `postgres` |
-| `quarkus.http.port` | `PORT` | `8080` |
 
 ## Architecture
 
@@ -115,38 +108,12 @@ What's covered:
 - **Integration tests** for each endpoint (`@QuarkusTest` + REST-Assured, hitting the full stack against H2)
 - **Exception mapper tests** for the error response contract
 
-## Packaging
-
-Standard Quarkus jar:
-
-```shell
-./mvnw package
-java -jar target/quarkus-app/quarkus-run.jar
-```
-
-Über-jar:
-
-```shell
-./mvnw package -Dquarkus.package.jar.type=uber-jar
-java -jar target/*-runner.jar
-```
-
-Native image (requires GraalVM, or container build):
-
-```shell
-./mvnw package -Dnative
-# or, without GraalVM installed locally:
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
-
-Dockerfiles for each variant are under [docker/](docker/).
 
 ## Known limitations
 
-This project is a demo/exercise, not a production-grade service. A few things are intentionally simplified:
+This project is a demo/exercise, a few things are intentionally simplified:
 
 - **Notification service** (`NotificationClient`) points to a non-existing endpoint. The call is fire-and-forget: a failure is logged as a warning but never propagates to the user. In production this should go through a queue or an outbox.
 - **Address verification** (`AddressVerificationClient`) is a stub. It echoes the address back and, when the postal code is missing, generates a random one. Replace with a real REST client before using this anywhere serious.
 - **No list/search endpoint** on `/users` yet. When the dataset grows we'll need pagination and filtering.
 - **No authentication / authorization**. All endpoints are open. Add OIDC / JWT before exposing this beyond the demo.
-- **H2 in tests, Postgres in prod**: the test profile uses H2, which has small SQL dialect differences vs Postgres. Integration tests against a real Postgres (Testcontainers) would catch them.
