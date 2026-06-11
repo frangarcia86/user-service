@@ -11,7 +11,7 @@ import com.users.domain.model.User;
 import com.users.infrastructure.persistence.UserEntity;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.CDI)
-public interface UserMapper {
+public interface UserEntityMapper {
     User toDomain(UserEntity entity);
     UserEntity toEntity(User user);
 

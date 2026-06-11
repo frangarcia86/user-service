@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import com.users.domain.model.User;
 import com.users.domain.repository.UserRepository;
-import com.users.infrastructure.mapper.UserMapper;
+import com.users.infrastructure.mapper.UserEntityMapper;
 import com.users.infrastructure.persistence.UserEntity;
 
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
@@ -19,7 +19,7 @@ public class UserRepositoryImpl
         implements UserRepository, PanacheRepositoryBase<UserEntity, UUID> {
 
     @Inject
-    UserMapper mapper;
+    UserEntityMapper mapper;
 
     @Override
     public User save(User user) {
