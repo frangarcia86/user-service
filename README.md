@@ -77,13 +77,26 @@ Datasource and HTTP port (defined in `application.properties`):
 
 ## Architecture
 
-Hexagonal-ish layering with one inbound adapter (REST) and two outbound ports (persistence and notification):
+Hexagonal-ish layering with one inbound adapter (REST) and three outbound ports (persistence, notification, address verification):
 
 ```
-api/              REST adapter: DTOs, JAX-RS resource, exception mappers
-application/      Use cases (one per operation) + application-level DTOs/mappers
-domain/           Pure domain model, exceptions, repository interface, outbound ports
-infrastructure/   JPA entities, Panache repository impl, REST clients for outbound ports
+api/                              REST adapter: DTOs, JAX-RS resource, exception mappers
+application/                      Use cases (one per operation) + application-level DTOs/mappers
+domain/
+  model/                          Domain entities and aggregate roots
+  exception/                      Domain exceptions
+  port/
+    address/                      AddressVerificationPort + result type
+    notification/                 NotificationPort
+    persistence/                  UserRepository
+infrastructure/
+  client/
+    address/                      AddressVerificationClient
+    notification/                 NotificationClient + REST DTO + REST proxy
+  persistence/
+    entity/                       JPA entities
+    mapper/                       Entity <-> domain mappers (MapStruct)
+    repository/                   Panache repository implementation
 ```
 
 Use cases depend only on the domain. Infrastructure implements the domain ports.
