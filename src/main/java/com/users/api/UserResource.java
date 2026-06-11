@@ -34,66 +34,59 @@ import jakarta.ws.rs.core.Response;
 @Produces(MediaType.APPLICATION_JSON)
 public class UserResource {
 
-	@Inject
-	CreateUserUseCase createUserUseCase;
+    @Inject
+    CreateUserUseCase createUserUseCase;
 
-	@Inject
-	GetUserByIdUseCase getUserByIdUseCase;
+    @Inject
+    GetUserByIdUseCase getUserByIdUseCase;
 
-	@Inject
-	CompleteUpdateUserUseCase updateUserUseCase;
+    @Inject
+    CompleteUpdateUserUseCase updateUserUseCase;
 
-	@Inject
-	PartialUpdateUserUseCase patchUserUseCase;
+    @Inject
+    PartialUpdateUserUseCase patchUserUseCase;
 
-	@Inject
-	DeleteUserUseCase deleteUserUseCase;
+    @Inject
+    DeleteUserUseCase deleteUserUseCase;
 
-	@Inject
-	UserDtoMapper userDtoMapper;
+    @Inject
+    UserDtoMapper userDtoMapper;
 
-	@POST
-	public Response createUser(@Valid CreateUserRequest request) {
-		User createdUser = createUserUseCase.execute(userDtoMapper.toDomain(request));
-		
-		UserResponse response = userDtoMapper.toResponse(createdUser);
-		return Response.created(URI.create("/users/" + createdUser.getId()))
-				.entity(response)
-				.build();
-	}
+    @POST
+    public Response createUser(@Valid CreateUserRequest request) {
+        User createdUser = createUserUseCase.execute(userDtoMapper.toDomain(request));
+        UserResponse response = userDtoMapper.toResponse(createdUser);
 
-	@GET
-	@Path("/{id}")
-	public Response getUserById(@PathParam("id") UUID id) {
-		User user = getUserByIdUseCase.execute(id);
-		
-		UserResponse response = userDtoMapper.toResponse(user);
-		return Response.ok(response).build();
-	}
+        return Response.created(URI.create("/users/" + createdUser.getId()))
+                .entity(response)
+                .build();
+    }
 
-	@PUT
-	@Path("/{id}")
-	public Response updateUser(@PathParam("id") UUID id, @Valid UpdateUserRequest request) {
-		User updatedUser = updateUserUseCase.execute(id, userDtoMapper.toUpdateData(request));
-		
-		UserResponse response = userDtoMapper.toResponse(updatedUser);
-		return Response.ok(response).build();
-	}
+    @GET
+    @Path("/{id}")
+    public Response getUserById(@PathParam("id") UUID id) {
+        User user = getUserByIdUseCase.execute(id);
+        return Response.ok(userDtoMapper.toResponse(user)).build();
+    }
 
-	@PATCH
-	@Path("/{id}")
-	public Response patchUser(@PathParam("id") UUID id, @Valid PatchUserRequest request) {
-		User patchedUser = patchUserUseCase.execute(id, userDtoMapper.toUpdateData(request));
-		
-		UserResponse response = userDtoMapper.toResponse(patchedUser);
-		return Response.ok(response).build();
-	}
+    @PUT
+    @Path("/{id}")
+    public Response updateUser(@PathParam("id") UUID id, @Valid UpdateUserRequest request) {
+        User updatedUser = updateUserUseCase.execute(id, userDtoMapper.toUpdateData(request));
+        return Response.ok(userDtoMapper.toResponse(updatedUser)).build();
+    }
 
-	@DELETE
-	@Path("/{id}")
-	public Response deleteUser(@PathParam("id") UUID id) {
-		deleteUserUseCase.execute(id);
-		
-		return Response.noContent().build();
-	}
+    @PATCH
+    @Path("/{id}")
+    public Response patchUser(@PathParam("id") UUID id, @Valid PatchUserRequest request) {
+        User patchedUser = patchUserUseCase.execute(id, userDtoMapper.toUpdateData(request));
+        return Response.ok(userDtoMapper.toResponse(patchedUser)).build();
+    }
+
+    @DELETE
+    @Path("/{id}")
+    public Response deleteUser(@PathParam("id") UUID id) {
+        deleteUserUseCase.execute(id);
+        return Response.noContent().build();
+    }
 }

@@ -8,6 +8,7 @@ import com.users.domain.exception.UserNotFoundException;
 import com.users.domain.model.User;
 import com.users.domain.repository.UserRepository;
 
+import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -27,7 +28,9 @@ public class PartialUpdateUserUseCase {
                 .orElseThrow(() -> new UserNotFoundException(id));
 
         userUpdateMapper.applyPartialUpdate(data, existing);
-
-        return userRepository.update(existing);
+        User updated = userRepository.update(existing);
+        
+        Log.infof("Applied partial update to user %s", id);
+        return updated;
     }
 }

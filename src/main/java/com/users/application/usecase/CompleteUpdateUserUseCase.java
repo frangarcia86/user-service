@@ -8,6 +8,7 @@ import com.users.domain.exception.UserNotFoundException;
 import com.users.domain.model.User;
 import com.users.domain.repository.UserRepository;
 
+import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -27,7 +28,9 @@ public class CompleteUpdateUserUseCase {
                 .orElseThrow(() -> new UserNotFoundException(id));
 
         userUpdateMapper.applyUpdate(data, existing);
-
-        return userRepository.replace(existing);
+        User replaced = userRepository.replace(existing);
+        
+        Log.infof("Replaced user %s", id);
+        return replaced;
     }
 }

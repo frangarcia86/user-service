@@ -16,7 +16,6 @@ class DeleteUserIntegrationTest {
 
     @Test
     void deleteUser_returns204_whenUserExists() {
-        // Create user first
         Map<String, Object> createRequest = Map.of(
                 "name", "Delete Me",
                 "email", "delete.me@mail.com"
@@ -33,14 +32,12 @@ class DeleteUserIntegrationTest {
 
         String id = location.substring(location.lastIndexOf('/') + 1);
 
-        // Delete user
         given()
         .when()
             .delete("/users/" + id)
         .then()
             .statusCode(204);
 
-        // Confirm user is no longer accessible
         given()
         .when()
             .get("/users/" + id)

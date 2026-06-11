@@ -17,7 +17,6 @@ class PatchUserIntegrationTest {
 
     @Test
     void patchUser_returns200_withOnlyUpdatedFields() {
-        // Create user first
         Map<String, Object> createRequest = Map.of(
                 "name", "Carlos Patch",
                 "email", "carlos.patch@mail.com",
@@ -37,7 +36,6 @@ class PatchUserIntegrationTest {
 
         String id = location.substring(location.lastIndexOf('/') + 1);
 
-        // Patch only phone
         Map<String, Object> patchRequest = Map.of("phone", "+34699000000");
 
         given()
@@ -58,7 +56,6 @@ class PatchUserIntegrationTest {
 
     @Test
     void patchUser_returns200_withAllFieldsUpdated() {
-        // Create user first
         Map<String, Object> createRequest = Map.of(
                 "name", "Maria Patch",
                 "email", "maria.patch@mail.com"
@@ -75,7 +72,6 @@ class PatchUserIntegrationTest {
 
         String id = location.substring(location.lastIndexOf('/') + 1);
 
-        // Patch all fields
         Map<String, Object> patchRequest = Map.of(
                 "name", "Maria Updated",
                 "birthDate", "1992-08-25",

@@ -5,6 +5,20 @@ This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
 If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
 
+## Configuration
+
+Business rules are defined in `src/main/resources/business.properties` and can be overridden at runtime via environment variables — no redeployment required.
+
+| Property | Env var | Default | Description |
+|---|---|---|---|
+| `user.access-alert.threshold-seconds` | `ACCESS_ALERT_THRESHOLD_SECONDS` | `60` | Seconds elapsed since user creation after which a GET on that user triggers an access alert notification to their email. |
+
+External REST clients are configured in `src/main/resources/clients.properties`.
+
+| Property | Env var | Default | Description |
+|---|---|---|---|
+| `quarkus.rest-client.notification-service.url` | `NOTIFICATION_SERVICE_URL` | `http://localhost:8081` | Base URL for the Notification Service (simulated, no real endpoint exists for this demo). |
+
 ## API
 
 | Method | Endpoint | Description |
