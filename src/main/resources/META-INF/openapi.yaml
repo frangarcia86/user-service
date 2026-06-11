@@ -11,10 +11,55 @@ servers:
     description: Local development server
 
 paths:
+  /auth/login:
+    post:
+      summary: Exchange email + password for a JWT bearer token
+      operationId: login
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            example:
+              email: "fran@company.com"
+              password: "sup3r-secret"
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+              example:
+                accessToken: "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9..."
+                tokenType: "Bearer"
+                expiresIn: 3600
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: 400
+                title: "Constraint Violation"
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: 401
+                title: "Invalid Credentials"
+
   /users:
     post:
-      summary: Create a new user
+      summary: Register a new user (public)
       operationId: createUser
+      security: []
       requestBody:
         required: true
         content:
@@ -24,6 +69,7 @@ paths:
             example:
               name: "Fran García"
               email: "fran@company.com"
+              password: "sup3r-secret"
               birthDate: "1990-06-15"
               phone: "+34 600 000 000"
               address: "Calle Mayor 1, Madrid"
@@ -64,6 +110,8 @@ paths:
     get:
       summary: Retrieve a user by ID
       operationId: getUserById
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -97,6 +145,15 @@ paths:
               example:
                 status: 400
                 title: "Invalid UUID format"
+        '401':
+          description: Missing or invalid JWT
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: 401
+                title: "Unauthorized"
         '404':
           description: User not found
           content:
@@ -110,6 +167,8 @@ paths:
     put:
       summary: Update a user
       operationId: updateUser
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -146,6 +205,15 @@ paths:
               example:
                 status: 400
                 title: "Invalid UUID format"
+        '401':
+          description: Missing or invalid JWT
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: 401
+                title: "Unauthorized"
         '404':
           description: User not found
           content:
@@ -168,6 +236,8 @@ paths:
     patch:
       summary: Partially update a user
       operationId: patchUser
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -201,6 +271,15 @@ paths:
               example:
                 status: 400
                 title: "Invalid UUID format"
+        '401':
+          description: Missing or invalid JWT
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: 401
+                title: "Unauthorized"
         '404':
           description: User not found
           content:
@@ -221,8 +300,10 @@ paths:
                 title: "Email already exists"
 
     delete:
-      summary: Delete a user
+      summary: Delete a user (admin only)
       operationId: deleteUser
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -243,6 +324,24 @@ paths:
               example:
                 status: 400
                 title: "Invalid UUID format"
+        '401':
+          description: Missing or invalid JWT
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: 401
+                title: "Unauthorized"
+        '403':
+          description: Authenticated user does not have the admin role
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: 403
+                title: "Forbidden"
         '404':
           description: User not found
           content:
@@ -260,6 +359,7 @@ components:
       required:
         - name
         - email
+        - password
       properties:
         name:
           type: string
@@ -270,6 +370,12 @@ components:
           type: string
           format: email
           example: "fran@company.com"
+        password:
+          type: string
+          format: password
+          minLength: 8
+          maxLength: 100
+          example: "sup3r-secret"
         birthDate:
           type: string
           format: date
@@ -380,3 +486,39 @@ components:
         title:
           type: string
           example: "User not found"
+
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: "fran@company.com"
+        password:
+          type: string
+          format: password
+          example: "sup3r-secret"
+
+    TokenResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          example: "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9..."
+        tokenType:
+          type: string
+          example: "Bearer"
+        expiresIn:
+          type: integer
+          format: int64
+          description: Token lifetime in seconds
+          example: 3600
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

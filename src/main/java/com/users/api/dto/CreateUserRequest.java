@@ -23,6 +23,10 @@ public class CreateUserRequest {
     @Email(message = "Email must be a valid address")
     private String email;
 
+    @NotBlank(message = "Password must not be blank")
+    @Size(min = 8, max = 100, message = "Password must be between 8 and 100 characters")
+    private String password;
+
     private LocalDate birthDate;
 
     @Size(max = 20, message = "Phone must not exceed 20 characters")

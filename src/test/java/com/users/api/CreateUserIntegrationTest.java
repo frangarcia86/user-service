@@ -22,6 +22,7 @@ class CreateUserIntegrationTest {
         Map<String, Object> request = Map.of(
                 "name", "Anton",
                 "email", "anton.happy@mail.com",
+                "password", "sup3r-secret",
                 "birthDate", "1986-07-20",
                 "phone", "+34611223344",
                 "address", "Jaen Street 3",
@@ -49,7 +50,8 @@ class CreateUserIntegrationTest {
     void createUser_returns400_whenNameIsBlank() {
         Map<String, Object> request = Map.of(
                 "name", " ",
-                "email", "antonio@mail.com"
+                "email", "antonio@mail.com",
+                "password", "sup3r-secret"
         );
 
         given()
@@ -67,7 +69,8 @@ class CreateUserIntegrationTest {
     void createUser_returns400_whenEmailIsInvalid() {
         Map<String, Object> request = Map.of(
                 "name", "Anton",
-                "email", "not-an-email"
+                "email", "not-an-email",
+                "password", "sup3r-secret"
         );
 
         given()
@@ -86,6 +89,7 @@ class CreateUserIntegrationTest {
         Map<String, Object> request = Map.of(
                 "name", "Anton",
                 "email", "antonio@mail.com",
+                "password", "sup3r-secret",
                 "postalCode", 100000000
         );
 
@@ -104,7 +108,8 @@ class CreateUserIntegrationTest {
     void createUser_returns409_whenEmailAlreadyExists() {
         Map<String, Object> request = Map.of(
                 "name", "Anton",
-                "email", "duplicate.email@mail.com"
+                "email", "duplicate.email@mail.com",
+                "password", "sup3r-secret"
         );
 
         given()
@@ -131,6 +136,7 @@ class CreateUserIntegrationTest {
         Map<String, Object> request = Map.of(
                 "name", "Carmen Lopez",
                 "email", "carmen.lopez@mail.com",
+                "password", "sup3r-secret",
                 "address", "Calle Sierpes 10"
         );
 

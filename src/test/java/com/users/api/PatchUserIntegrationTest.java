@@ -10,9 +10,11 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.security.TestSecurity;
 import io.restassured.http.ContentType;
 
 @QuarkusTest
+@TestSecurity(user = "test", roles = {"user", "admin"})
 class PatchUserIntegrationTest {
 
     @Test
@@ -20,6 +22,7 @@ class PatchUserIntegrationTest {
         Map<String, Object> createRequest = Map.of(
                 "name", "Carlos Patch",
                 "email", "carlos.patch@mail.com",
+                "password", "sup3r-secret",
                 "phone", "+34611000000",
                 "address", "Seville Street 2",
                 "postalCode", 41001
@@ -58,7 +61,8 @@ class PatchUserIntegrationTest {
     void patchUser_returns200_withAllFieldsUpdated() {
         Map<String, Object> createRequest = Map.of(
                 "name", "Maria Patch",
-                "email", "maria.patch@mail.com"
+                "email", "maria.patch@mail.com",
+                "password", "sup3r-secret"
         );
 
         String location = given()

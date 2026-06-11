@@ -2,6 +2,7 @@ package com.users.api.mapper;
 
 import java.util.UUID;
 
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
@@ -19,6 +20,7 @@ import com.users.domain.model.User;
 )
 public interface UserDtoMapper {
 
+    @BeanMapping(ignoreUnmappedSourceProperties = {"password"})
     @Mapping(target = "id", expression = "java(UUID.randomUUID())")
     @Mapping(target = "createdAt", ignore = true)
     User toDomain(CreateUserRequest request);

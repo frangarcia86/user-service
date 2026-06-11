@@ -8,6 +8,7 @@ import com.users.domain.model.User;
 public interface UserRepository {
     User save(User user);
     Optional<User> findUserById(UUID id);
+    Optional<User> findUserByEmail(String email);
     boolean existsByEmail(String email);
     User update(User user);
     User replace(User user);

@@ -67,6 +67,7 @@ class UserResourceTest {
         CreateUserRequest request = new CreateUserRequest();
         request.setName("Marta Sanchez");
         request.setEmail("marta.sanchez@mail.com");
+        request.setPassword("sup3r-secret");
         request.setBirthDate(LocalDate.of(1988, 9, 12));
         request.setPhone("+34644332211");
         request.setAddress("Zaragoza Road 8");
@@ -91,7 +92,7 @@ class UserResourceTest {
                 .build();
 
         when(userDtoMapper.toDomain(request)).thenReturn(domainRequest);
-        when(createUserUseCase.execute(domainRequest)).thenReturn(createdUser);
+        when(createUserUseCase.execute(domainRequest, "sup3r-secret")).thenReturn(createdUser);
         when(userDtoMapper.toResponse(createdUser)).thenReturn(responseBody);
 
         // Act
@@ -103,7 +104,7 @@ class UserResourceTest {
         assertThat(response.getEntity()).isEqualTo(responseBody);
 
         verify(userDtoMapper).toDomain(request);
-        verify(createUserUseCase).execute(domainRequest);
+        verify(createUserUseCase).execute(domainRequest, "sup3r-secret");
         verify(userDtoMapper).toResponse(createdUser);
     }
 

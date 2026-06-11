@@ -9,16 +9,19 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.security.TestSecurity;
 import io.restassured.http.ContentType;
 
 @QuarkusTest
+@TestSecurity(user = "test", roles = {"user", "admin"})
 class DeleteUserIntegrationTest {
 
     @Test
     void deleteUser_returns204_whenUserExists() {
         Map<String, Object> createRequest = Map.of(
                 "name", "Delete Me",
-                "email", "delete.me@mail.com"
+                "email", "delete.me@mail.com",
+                "password", "sup3r-secret"
         );
 
         String location = given()

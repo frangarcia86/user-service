@@ -10,9 +10,11 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.security.TestSecurity;
 import io.restassured.http.ContentType;
 
 @QuarkusTest
+@TestSecurity(user = "test", roles = {"user", "admin"})
 class GetUserIntegrationTest {
 
     @Test
@@ -20,6 +22,7 @@ class GetUserIntegrationTest {
         Map<String, Object> request = Map.of(
                 "name", "Laura",
                 "email", "laura.get@mail.com",
+                "password", "sup3r-secret",
                 "birthDate", "1990-03-15",
                 "phone", "+34699887766",
                 "address", "Madrid Avenue 7",

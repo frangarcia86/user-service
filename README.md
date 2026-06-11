@@ -28,13 +28,14 @@ To stop the database when you're done: `docker compose down` (add `-v` to also d
 
 ## API
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/users` | Create a new user |
-| `GET` | `/users/{id}` | Get a user by ID |
-| `PUT` | `/users/{id}` | Replace a user (full update) |
-| `PATCH` | `/users/{id}` | Update some fields of a user |
-| `DELETE` | `/users/{id}` | Delete a user |
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| `POST` | `/auth/login` | public | Get a JWT for an existing user |
+| `POST` | `/users` | public | Register a new user (returns the user, role `USER` is assigned) |
+| `GET` | `/users/{id}` | `user`, `admin` | Get a user by ID |
+| `PUT` | `/users/{id}` | `user`, `admin` | Replace a user (full update) |
+| `PATCH` | `/users/{id}` | `user`, `admin` | Update some fields of a user |
+| `DELETE` | `/users/{id}` | `admin` | Delete a user |
 
 Full contract and try-it-out:
 
@@ -42,6 +43,34 @@ Full contract and try-it-out:
 - Production Swagger UI: <https://user-service-1vnl.onrender.com/q/swagger-ui>
 
 A Postman collection and environments live under [postman/](postman/) if you prefer that over Swagger.
+
+## Authentication
+
+Stateless JWT (RS256) issued and validated by this service.
+
+1. `POST /users` to register (returns `201` and assigns the `USER` role).
+2. `POST /auth/login` with `email` + `password` to get a `Bearer` token:
+
+   ```json
+   { "accessToken": "...", "tokenType": "Bearer", "expiresIn": 3600 }
+   ```
+3. Send it on protected calls: `Authorization: Bearer <token>`.
+
+Roles:
+
+- `USER` — read/update endpoints on `/users/{id}`.
+- `ADMIN` — also allowed to `DELETE /users/{id}`. Currently no endpoint promotes a user to `ADMIN`; set the `role` column in the `credentials` table manually for testing.
+
+Keys:
+
+- `src/main/resources/privateKey.pem` (PKCS#8) signs tokens.
+- `src/main/resources/publicKey.pem` (SubjectPublicKeyInfo) verifies them.
+- The bundled pair is for local/dev only. In production override `mp.jwt.verify.publickey.location` and `smallrye.jwt.sign.key.location` (or mount the files via a secret) and set `JWT_ISSUER`.
+
+| Property | Env var | Default |
+|---|---|---|
+| `mp.jwt.verify.issuer` / `smallrye.jwt.new-token.issuer` | `JWT_ISSUER` | `https://user-service.local` |
+| `smallrye.jwt.new-token.lifespan` | `JWT_LIFESPAN_SECONDS` | `3600` |
 
 ## Health
 
@@ -97,6 +126,7 @@ infrastructure/
     entity/                       JPA entities
     mapper/                       Entity <-> domain mappers (MapStruct)
     repository/                   Panache repository implementation
+  security/                       BCrypt password hashing + JWT token issuer
 ```
 
 Use cases depend only on the domain. Infrastructure implements the domain ports.
@@ -148,5 +178,5 @@ This project is a demo/exercise, not a production-grade service. A few things ar
 - **Notification service** (`NotificationClient`) points to a non-existing endpoint. The call is fire-and-forget: a failure is logged as a warning but never propagates to the user. In production this should go through a queue or an outbox.
 - **Address verification** (`AddressVerificationClient`) is a stub. It echoes the address back and, when the postal code is missing, generates a random one. Replace with a real REST client before using this anywhere serious.
 - **No list/search endpoint** on `/users` yet. When the dataset grows we'll need pagination and filtering.
-- **No authentication / authorization**. All endpoints are open. Add OIDC / JWT before exposing this beyond the demo.
+- **No role-admin endpoint**: the `USER` role is the only one assigned automatically on registration. Promoting a user to `ADMIN` requires updating the `credentials` table directly. A proper admin-management endpoint is pending.
 - **H2 in tests, Postgres in prod**: the test profile uses H2, which has small SQL dialect differences vs Postgres. Integration tests against a real Postgres (Testcontainers) would catch them.

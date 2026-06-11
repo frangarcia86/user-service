@@ -15,6 +15,8 @@ import com.users.application.usecase.GetUserByIdUseCase;
 import com.users.application.usecase.PartialUpdateUserUseCase;
 import com.users.domain.model.User;
 
+import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
@@ -53,8 +55,9 @@ public class UserResource {
     UserDtoMapper userDtoMapper;
 
     @POST
+    @PermitAll
     public Response createUser(@Valid CreateUserRequest request) {
-        User createdUser = createUserUseCase.execute(userDtoMapper.toDomain(request));
+        User createdUser = createUserUseCase.execute(userDtoMapper.toDomain(request), request.getPassword());
         UserResponse response = userDtoMapper.toResponse(createdUser);
 
         return Response.created(URI.create("/users/" + createdUser.getId()))
@@ -64,6 +67,7 @@ public class UserResource {
 
     @GET
     @Path("/{id}")
+    @RolesAllowed({"user", "admin"})
     public Response getUserById(@PathParam("id") UUID id) {
         User user = getUserByIdUseCase.execute(id);
         return Response.ok(userDtoMapper.toResponse(user)).build();
@@ -71,6 +75,7 @@ public class UserResource {
 
     @PUT
     @Path("/{id}")
+    @RolesAllowed({"user", "admin"})
     public Response updateUser(@PathParam("id") UUID id, @Valid UpdateUserRequest request) {
         User updatedUser = updateUserUseCase.execute(id, userDtoMapper.toUpdateData(request));
         return Response.ok(userDtoMapper.toResponse(updatedUser)).build();
@@ -78,6 +83,7 @@ public class UserResource {
 
     @PATCH
     @Path("/{id}")
+    @RolesAllowed({"user", "admin"})
     public Response patchUser(@PathParam("id") UUID id, @Valid PatchUserRequest request) {
         User patchedUser = patchUserUseCase.execute(id, userDtoMapper.toUpdateData(request));
         return Response.ok(userDtoMapper.toResponse(patchedUser)).build();
@@ -85,6 +91,7 @@ public class UserResource {
 
     @DELETE
     @Path("/{id}")
+    @RolesAllowed("admin")
     public Response deleteUser(@PathParam("id") UUID id) {
         deleteUserUseCase.execute(id);
         return Response.noContent().build();

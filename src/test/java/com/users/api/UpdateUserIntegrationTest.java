@@ -10,9 +10,11 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.security.TestSecurity;
 import io.restassured.http.ContentType;
 
 @QuarkusTest
+@TestSecurity(user = "test", roles = {"user", "admin"})
 class UpdateUserIntegrationTest {
 
     @Test
@@ -20,6 +22,7 @@ class UpdateUserIntegrationTest {
         Map<String, Object> createRequest = Map.of(
                 "name", "Laura Put",
                 "email", "laura.put@mail.com",
+                "password", "sup3r-secret",
                 "birthDate", "1990-03-15",
                 "phone", "+34699887766",
                 "address", "Madrid Avenue 7",
@@ -85,7 +88,8 @@ class UpdateUserIntegrationTest {
     void updateUser_returns400_whenNameIsBlank() {
         Map<String, Object> createRequest = Map.of(
                 "name", "Laura Put Validation",
-                "email", "laura.put.validation@mail.com"
+                "email", "laura.put.validation@mail.com",
+                "password", "sup3r-secret"
         );
 
         String location = given()

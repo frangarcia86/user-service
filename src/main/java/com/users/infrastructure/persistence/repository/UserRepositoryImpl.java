@@ -37,6 +37,11 @@ public class UserRepositoryImpl
     }
 
     @Override
+    public Optional<User> findUserByEmail(String email) {
+        return find("email", email).firstResultOptional().map(mapper::toDomain);
+    }
+
+    @Override
     public boolean existsByEmail(String email) {
         return count("email", email) > 0;
     }
