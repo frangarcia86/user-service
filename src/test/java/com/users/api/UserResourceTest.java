@@ -60,46 +60,44 @@ class UserResourceTest {
 
     @Test
     void createUser_returns201WithLocationAndResponseBody() {
-        // Arrange: request and domain input data
+        // Arrange
         UUID id = UUID.randomUUID();
         Instant createdAt = Instant.now();
 
         CreateUserRequest request = new CreateUserRequest();
-        request.setName("Marta Sánchez");
+        request.setName("Marta Sanchez");
         request.setEmail("marta.sanchez@mail.com");
         request.setBirthDate(LocalDate.of(1988, 9, 12));
         request.setPhone("+34644332211");
         request.setAddress("Zaragoza Road 8");
         request.setPostalCode(50001);
 
-        User domainRequest = new User(id, "Marta Sánchez", "marta.sanchez@mail.com");
-        User createdUser = new User(id, "Marta Sánchez", "marta.sanchez@mail.com");
+        User domainRequest = new User(id, "Marta Sanchez", "marta.sanchez@mail.com");
+        User createdUser = new User(id, "Marta Sanchez", "marta.sanchez@mail.com");
         createdUser.setBirthDate(LocalDate.of(1988, 9, 12));
         createdUser.setPhone("+34644332211");
         createdUser.setAddress("Zaragoza Road 8");
         createdUser.setPostalCode(50001);
 
-        // Arrange: expected response payload
         UserResponse responseBody = UserResponse.builder()
                 .id(id)
-            .name("Marta Sánchez")
-            .email("marta.sanchez@mail.com")
-            .birthDate(LocalDate.of(1988, 9, 12))
-            .phone("+34644332211")
+                .name("Marta Sanchez")
+                .email("marta.sanchez@mail.com")
+                .birthDate(LocalDate.of(1988, 9, 12))
+                .phone("+34644332211")
                 .address("Zaragoza Road 8")
-            .postalCode(50001)
+                .postalCode(50001)
                 .createdAt(createdAt)
                 .build();
 
-        // Arrange: use case and mapper behavior
         when(userDtoMapper.toDomain(request)).thenReturn(domainRequest);
         when(createUserUseCase.execute(domainRequest)).thenReturn(createdUser);
         when(userDtoMapper.toResponse(createdUser)).thenReturn(responseBody);
 
-        // Act: execute resource method
+        // Act
         Response response = userResource.createUser(request);
 
-        // Assert: validate response and interactions
+        // Assert
         assertThat(response.getStatus()).isEqualTo(201);
         assertThat(response.getLocation()).isEqualTo(URI.create("/users/" + id));
         assertThat(response.getEntity()).isEqualTo(responseBody);
@@ -111,28 +109,26 @@ class UserResourceTest {
 
     @Test
     void getUserById_returns200WhenUserExists() {
-        // Arrange: existing user data
+        // Arrange
         UUID id = UUID.randomUUID();
         Instant createdAt = Instant.now();
 
         User user = new User(id, "Pablo Navarro", "pablo.navarro@mail.com");
 
-        // Arrange: expected response payload
         UserResponse responseBody = UserResponse.builder()
                 .id(id)
-            .name("Pablo Navarro")
-            .email("pablo.navarro@mail.com")
+                .name("Pablo Navarro")
+                .email("pablo.navarro@mail.com")
                 .createdAt(createdAt)
                 .build();
 
-        // Arrange: use case and mapper behavior
         when(getUserByIdUseCase.execute(id)).thenReturn(user);
         when(userDtoMapper.toResponse(user)).thenReturn(responseBody);
 
-        // Act: execute resource method
+        // Act
         Response response = userResource.getUserById(id);
 
-        // Assert: validate response and interactions
+        // Assert
         assertThat(response.getStatus()).isEqualTo(200);
         assertThat(response.getEntity()).isEqualTo(responseBody);
 
@@ -146,7 +142,7 @@ class UserResourceTest {
 
         when(getUserByIdUseCase.execute(id)).thenThrow(new UserNotFoundException(id));
 
-        // Act + Assert: use case throws domain exception
+        // Act + Assert
         assertThatThrownBy(() -> userResource.getUserById(id))
                 .isInstanceOf(UserNotFoundException.class);
 

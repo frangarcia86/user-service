@@ -23,7 +23,6 @@ public class CreateUserUseCase {
     @Transactional
     public User execute(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
-            Log.warnf("Email already exists: %s", user.getEmail());
             throw new EmailAlreadyExistsException(user.getEmail());
         }
 
