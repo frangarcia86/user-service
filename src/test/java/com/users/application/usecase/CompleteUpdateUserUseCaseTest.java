@@ -34,8 +34,7 @@ class CompleteUpdateUserUseCaseTest {
     CompleteUpdateUserUseCase updateUserUseCase;
 
     @Test
-    void execute_updatesAllFieldsAndReturnsUpdatedUser() {
-        // Arrange: existing user in repository
+    void updatesAllFieldsAndReturnsUpdatedUser() {
         UUID id = UUID.randomUUID();
         User existing = new User(id, "Sofia Martin", "sofia.martin@empresa.com");
 
@@ -56,10 +55,8 @@ class CompleteUpdateUserUseCaseTest {
         when(userRepository.findUserById(id)).thenReturn(Optional.of(existing));
         when(userRepository.replace(existing)).thenReturn(saved);
 
-        // Act
         User result = updateUserUseCase.execute(id, data);
 
-        // Assert
         assertThat(result).isEqualTo(saved);
         verify(userRepository).findUserById(id);
         verify(userUpdateMapper).applyUpdate(data, existing);
@@ -67,14 +64,12 @@ class CompleteUpdateUserUseCaseTest {
     }
 
     @Test
-    void execute_throwsUserNotFoundException_whenUserDoesNotExist() {
-        // Arrange: repository returns empty
+    void throwsWhenUserNotFound() {
         UUID id = UUID.randomUUID();
         UserUpdateData data = new UserUpdateData("Sofia Martin Diaz", null, null, null, null);
 
         when(userRepository.findUserById(id)).thenReturn(Optional.empty());
 
-        // Act + Assert
         assertThatThrownBy(() -> updateUserUseCase.execute(id, data))
                 .isInstanceOf(UserNotFoundException.class);
 

@@ -24,14 +24,13 @@ public class CompleteUpdateUserUseCase {
 
     @Transactional
     public User execute(UUID id, UserUpdateData data) {
-        Log.debugf("Looking up user for full update with id: %s", id);
         User existing = userRepository.findUserById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
 
         userUpdateMapper.applyUpdate(data, existing);
         User replaced = userRepository.replace(existing);
         
-        Log.infof("User fully updated with id: %s", id);
+        Log.infof("User replaced: %s", id);
         return replaced;
     }
 }

@@ -28,12 +28,12 @@ public class GetUserByIdUseCase {
     NotificationPort notificationPort;
 
     public User execute(UUID id) {
-        Log.debugf("Looking up user with id: %s", id);
         User user = userRepository.findUserById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
         Log.debugf("User found with id: %s", id);
 
         triggerAccessAlertIfNeeded(user);
+        
         return user;
     }
 
@@ -41,11 +41,10 @@ public class GetUserByIdUseCase {
         if (user.getCreatedAt() == null) {
             return;
         }
-        
+
         long secondsSinceCreation = Duration.between(user.getCreatedAt(), Instant.now()).getSeconds();
         if (secondsSinceCreation > accessAlertThresholdSeconds) {
-            Log.infof("User '%s' (id: %s) was created %ds ago — triggering access alert",
-                    user.getName(), user.getId(), secondsSinceCreation);
+            Log.infof("Access alert triggered for user %s (%ds old)", user.getId(), secondsSinceCreation);
             notificationPort.notifyAccessAlert(user);
         }
     }

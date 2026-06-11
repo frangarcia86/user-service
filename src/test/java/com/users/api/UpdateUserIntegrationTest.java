@@ -17,7 +17,6 @@ class UpdateUserIntegrationTest {
 
     @Test
     void updateUser_returns200_withFullyUpdatedUser() {
-        // Create user first
         Map<String, Object> createRequest = Map.of(
                 "name", "Laura Put",
                 "email", "laura.put@mail.com",
@@ -38,7 +37,6 @@ class UpdateUserIntegrationTest {
 
         String id = location.substring(location.lastIndexOf('/') + 1);
 
-        // Update user with PUT
         Map<String, Object> updateRequest = Map.of(
                 "name", "Laura Updated",
                 "birthDate", "1991-06-20",
@@ -85,7 +83,6 @@ class UpdateUserIntegrationTest {
 
     @Test
     void updateUser_returns400_whenNameIsBlank() {
-        // Create user first
         Map<String, Object> createRequest = Map.of(
                 "name", "Laura Put Validation",
                 "email", "laura.put.validation@mail.com"

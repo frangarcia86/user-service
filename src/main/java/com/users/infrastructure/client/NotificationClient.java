@@ -21,9 +21,6 @@ public class NotificationClient implements NotificationPort {
 
     @Override
     public void notifyAccessAlert(User user) {
-        Log.infof("Sending access alert notification for user '%s' <%s> (id: %s)",
-                user.getName(), user.getEmail(), user.getId());
-
         AccessAlertRequest request = AccessAlertRequest.builder()
                 .userId(user.getId())
                 .email(user.getEmail())
@@ -32,9 +29,9 @@ public class NotificationClient implements NotificationPort {
 
         // Notification Service is simulated — no real endpoint exists for this demo.
         try (Response response = notificationRestClient.sendAccessAlert(request)) {
-            Log.debugf("Access alert response status: %d for user id: %s", response.getStatus(), user.getId());
+            Log.infof("Access alert sent for user %s (status=%d)", user.getId(), response.getStatus());
         } catch (Exception e) {
-            Log.warnf("Failed to send access alert for user id %s: %s", user.getId(), e.getMessage());
+            Log.warnf("Failed to send access alert for user %s: %s", user.getId(), e.getMessage());
         }
     }
 }

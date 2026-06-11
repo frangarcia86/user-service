@@ -14,14 +14,13 @@ public class AddressVerificationClient implements AddressVerificationPort {
 
     private static final Random RANDOM = new Random();
 
-    // TODO: inject a Quarkus REST client pointing to the Address Verification Service.
-    //       The service validates and normalizes the address, and resolves the postal code
-    //       when missing. Address Verification Service is simulated — no real endpoint exists for this demo.
+    // TODO replace this stub with a real REST client to the Address Verification Service
+    //      (POST /address/verify -> normalised address + resolved postal code).
+    //      Out of scope for this demo.
 
     @Override
     public AddressVerificationResult verify(User user) {
-        Log.infof("Verifying address for user '%s': address='%s', postalCode=%s",
-                user.getName(), user.getAddress(), user.getPostalCode());
+        Log.infof("Verifying address for user %s", user.getId());
 
         String verifiedAddress = user.getAddress();
         Integer resolvedPostalCode = user.getPostalCode();
@@ -33,9 +32,7 @@ public class AddressVerificationClient implements AddressVerificationPort {
         }
 
         // TODO: POST /address/verify
-        //       body: { "address": "<address>", "postalCode": <postalCode> }
-        //       Expected response: { "address": "<normalized>", "postalCode": <resolved> }
-
+        
         return new AddressVerificationResult(verifiedAddress, resolvedPostalCode);
     }
 }

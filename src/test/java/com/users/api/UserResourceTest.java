@@ -142,7 +142,6 @@ class UserResourceTest {
 
     @Test
     void getUserById_throwsUserNotFoundExceptionWhenUserDoesNotExist() {
-        // Arrange: repository returns nothing for the requested id
         UUID id = UUID.randomUUID();
 
         when(getUserByIdUseCase.execute(id)).thenThrow(new UserNotFoundException(id));
@@ -201,7 +200,6 @@ class UserResourceTest {
 
     @Test
     void updateUser_throwsUserNotFoundException_whenUserDoesNotExist() {
-        // Arrange
         UUID id = UUID.randomUUID();
         UpdateUserRequest request = new UpdateUserRequest();
         request.setName("Pablo Navarro Updated");
@@ -270,25 +268,20 @@ class UserResourceTest {
 
     @Test
     void deleteUser_returns204WhenUserExists() {
-        // Arrange
         UUID id = UUID.randomUUID();
         doNothing().when(deleteUserUseCase).execute(id);
 
-        // Act
         Response response = userResource.deleteUser(id);
 
-        // Assert
         assertThat(response.getStatus()).isEqualTo(204);
         verify(deleteUserUseCase).execute(id);
     }
 
     @Test
     void deleteUser_throwsUserNotFoundException_whenUserDoesNotExist() {
-        // Arrange
         UUID id = UUID.randomUUID();
         doThrow(new UserNotFoundException(id)).when(deleteUserUseCase).execute(id);
 
-        // Act + Assert
         assertThatThrownBy(() -> userResource.deleteUser(id))
                 .isInstanceOf(UserNotFoundException.class);
 

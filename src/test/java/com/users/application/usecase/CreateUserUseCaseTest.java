@@ -49,7 +49,7 @@ class CreateUserUseCaseTest {
     }
 
     @Test
-    void execute_throwsEmailAlreadyExistsException_whenEmailIsDuplicated() {
+    void rejectsDuplicateEmail() {
         UUID id = UUID.randomUUID();
         User input = new User(id, "Raul Jimenez", "raul.jimenez@correo.es");
 
@@ -60,7 +60,7 @@ class CreateUserUseCaseTest {
     }
 
     @Test
-    void execute_enrichesAddressData_whenAddressIsProvided() {
+    void enrichesAddressData_whenAddressIsProvided() {
         UUID id = UUID.randomUUID();
         User input = new User(id, "Raul Jimenez", "raul.jimenez@correo.es");
         input.setAddress("Calle Mayor 1");
@@ -79,7 +79,7 @@ class CreateUserUseCaseTest {
     }
 
     @Test
-    void execute_skipsAddressVerification_whenAddressIsNull() {
+    void skipsAddressVerification_whenAddressIsNull() {
         UUID id = UUID.randomUUID();
         User input = new User(id, "Raul Jimenez", "raul.jimenez@correo.es");
         User saved = new User(id, "Raul Jimenez", "raul.jimenez@correo.es");

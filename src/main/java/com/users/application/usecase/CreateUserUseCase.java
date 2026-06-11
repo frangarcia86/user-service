@@ -22,16 +22,15 @@ public class CreateUserUseCase {
 
     @Transactional
     public User execute(User user) {
-        Log.debugf("Checking email uniqueness for: %s", user.getEmail());
         if (userRepository.existsByEmail(user.getEmail())) {
             Log.warnf("Email already exists: %s", user.getEmail());
             throw new EmailAlreadyExistsException(user.getEmail());
         }
 
         enrichAddressData(user);
-
         User saved = userRepository.save(user);
-        Log.infof("User saved with id: %s", saved.getId());
+
+        Log.infof("User saved: %s", saved.getId());
         return saved;
     }
 
@@ -39,11 +38,10 @@ public class CreateUserUseCase {
         if (user.getAddress() == null) {
             return;
         }
+        
         AddressVerificationResult result = addressVerificationPort.verify(user);
         user.setAddress(result.address());
         user.setPostalCode(result.postalCode());
-        Log.debugf("Address enriched for user '%s': address='%s', postalCode=%d",
-                user.getName(), result.address(), result.postalCode());
     }
 }
 

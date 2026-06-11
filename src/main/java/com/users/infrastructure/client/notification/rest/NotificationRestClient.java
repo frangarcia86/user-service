@@ -10,10 +10,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-/**
- * REST client for the Notification Service.
- * Simulated — no real endpoint exists for this demo.
- */
+// Simulated notification service. No real endpoint exists for this demo.
 @RegisterRestClient(configKey = "notification-service")
 @Path("/notifications")
 public interface NotificationRestClient {
