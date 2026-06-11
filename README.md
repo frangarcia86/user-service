@@ -113,7 +113,7 @@ This project is a demo/exercise, a few things are intentionally simplified:
 
 - **Notification service** (`NotificationClient`) points to a non-existing endpoint. The call is fire-and-forget: a failure is logged as a warning but never propagates to the user. In production this should go through a queue or an outbox.
 - **Address verification** (`AddressVerificationClient`) is a stub. It echoes the address back and, when the postal code is missing, generates a random one. Replace with a real REST client before using this anywhere serious.
-- **No authentication / authorization**. All endpoints are open. Add OIDC / JWT before exposing this beyond the demo.
+- **No authentication / authorization**. All endpoints are open.
 - **No list/search endpoint** on `/users` yet.
 - **Production database**: hosted on [Neon](https://neon.tech) (Postgres serverless, free tier).
 - **Production hosting**: deployed on [Render](https://render.com) (free tier). The service idles after 15 minutes without traffic, so the first request after a quiet period can take around 50 seconds while it spins back up.
