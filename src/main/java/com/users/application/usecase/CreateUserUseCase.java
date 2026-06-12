@@ -11,6 +11,10 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
+/**
+ * Creates a new user. Validates email uniqueness and, if an address is provided,
+ * enriches it with data from the address verification service.
+ */
 @ApplicationScoped
 public class CreateUserUseCase {
 

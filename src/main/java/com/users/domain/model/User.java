@@ -3,10 +3,13 @@ package com.users.domain.model;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+/** Core user aggregate. Email is set at creation and cannot be changed. */
 @Getter
+@EqualsAndHashCode(callSuper = true)
 public class User extends AggregateRoot {
 
     private final String email;
