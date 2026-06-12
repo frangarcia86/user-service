@@ -6,6 +6,7 @@ import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
 
+/** Core user aggregate. Email is set at creation and cannot be changed. */
 @Getter
 public class User extends AggregateRoot {
 

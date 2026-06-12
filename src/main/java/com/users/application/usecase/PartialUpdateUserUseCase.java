@@ -13,6 +13,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
+/**
+ * Updates only the fields provided in the request, leaving the rest unchanged (PATCH semantics).
+ */
 @ApplicationScoped
 public class PartialUpdateUserUseCase {
 

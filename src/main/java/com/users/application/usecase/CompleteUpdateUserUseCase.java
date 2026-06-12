@@ -13,6 +13,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
+/**
+ * Replaces all updatable fields of an existing user (PUT semantics).
+ */
 @ApplicationScoped
 public class CompleteUpdateUserUseCase {
 
