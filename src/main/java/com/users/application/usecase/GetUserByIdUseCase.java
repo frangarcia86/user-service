@@ -15,6 +15,9 @@ import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
+/**
+ * Retrieves a user by ID. If the account is older than the configured threshold.
+ */
 @ApplicationScoped
 public class GetUserByIdUseCase {
 
